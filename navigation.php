@@ -17,6 +17,10 @@
                      <li>
                         <a href="?module=manufaktur"> <i class="menu-icon fa fa-medkit"></i>Data Manufaktur</a>
                     </li> 
+
+                    <li>
+                        <a href="?module=transaksi"> <i class="menu-icon fa fa-shopping-cart"></i>Menu Transaksi</a>
+                    </li>
                  
                     <li>
                         <a href="?module=rekap"> <i class="menu-icon fa fa-shopping-cart"></i>Data Rekap</a>

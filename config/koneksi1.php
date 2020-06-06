@@ -3,7 +3,7 @@ date_default_timezone_set("Asia/Jakarta");
 error_reporting(0);
 $server = "localhost";
 $username = "root";
-$password = "";
+$password = "root";
 $database = "forecasting";
 
 // Koneksi dan memilih database di server

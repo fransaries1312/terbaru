@@ -40,6 +40,7 @@ header('location:index.php');
     <link rel="stylesheet" href="assets/css/lib/datatable/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/lib/chosen/chosen.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+   
  
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
 </head>
@@ -102,6 +103,7 @@ header('location:index.php');
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
     <script src="assets/js/main.js"></script>
+    
     <!--  Chart js -->
     
     <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.3/dist/Chart.bundle.min.js"></script> -->
@@ -145,8 +147,13 @@ header('location:index.php');
     <script src="assets/js/init/datatables-init.js"></script>
     <script src="assets/js/lib/chosen/chosen.jquery.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="assets/typeahead.js"></script>
+    <script type="text/javascript" src="public/transaksi.js"></script>
+  
     <script type="text/javascript">
         $(document).ready(function() {
+            var unique = [];
+            var distinct = [];
           $('#bootstrap-data-table-export').DataTable();
 
           
@@ -154,8 +161,58 @@ header('location:index.php');
                 format: 'dd-mm-yyyy',
                 todayHighlight: true,
                 autoclose: true,   
-            });
+            });          
+
       } );
+
+        function transaksi_belum_selesai()
+        {
+            console.log($('#nota').val());
+            var status;
+            var id;
+            $.ajax({
+                url : "modules/transaksi/aksi_transaksi.php?module=transaksi&act=update_stok",
+                type: "POST",
+                dataType: "JSON",
+                async: false,
+                data:{id:$('#id_obat').val(),nota:$('#nota').val(),tanggal:$('#tanggal').val(),qty:$('#qty').val(),diskon:$('#diskon').val(),total_harga:$('#subtotal1').val(),subtotal:$('#total1').val()},
+                success: function(data){
+                    console.log(data);
+                    if(data.status==true)
+                    {
+                        toastr.success(data.msg,'Sukses');
+                // $('#stok').val(data.stok);
+                // $('#stok1').val(data.stok);
+                // $('#harga').val(numberToCurrency2(Math.floor(pecahan(data.harga_obat))));
+                status=true;
+                id=data.id_detail;
+            }
+            else
+            {
+                toastr.warning(data.msg,'Peringatan');
+                // $('#stok').val(data.stok);
+                // $('#stok1').val(data.stok);
+                // $('#id_obat').val('');   
+                // $('#qty').val(0);  
+                // $('#diskon').val(0);  
+                // $('#harga').val(numberToCurrency2(Math.floor(pecahan(0))));
+                // $('#subtotal').val(numberToCurrency2(Math.floor(pecahan(0))));
+                // $('#subtotal1').val(numberToCurrency2(Math.floor(pecahan(0))));
+                // $('#total').val(numberToCurrency2(Math.floor(pecahan(0))));
+                // $('#total1').val(numberToCurrency2(Math.floor(pecahan(0))));
+                // $('#nama_barang').val('');        
+                status=false;
+                id='';
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+          alert('Error get data from ajax');
+      }
+  });
+            return id;
+        }
+
   </script>
 </body>
 </html>

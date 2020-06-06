@@ -17,7 +17,14 @@ if ($_GET['module'] == 'obat') {
 // Bagian Kategori Obat
 if ($_GET['module'] == 'kategori') {
     include"modules/kategori/kategori.php";
-} else
+}
+else
+
+// Bagian Kategori Obat
+if ($_GET['module'] == 'transaksi') {
+    include"modules/transaksi/transaksi.php";
+}
+ else
 
 // Bagian Data Manufaktur Obat
 if ($_GET['module'] == 'manufaktur') {
@@ -26,7 +33,7 @@ if ($_GET['module'] == 'manufaktur') {
     
 // Bagian Data Rekap
 if ($_GET['module'] == 'rekap') {
-    include"modules/rekap/rekap.php";
+    include"modules/rekap/rekap1.php";
 } else
     
 // Bagian Laporan
