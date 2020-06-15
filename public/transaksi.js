@@ -193,8 +193,10 @@ $(document).ready(function() {
             }
         }
 
-        if($('#kembali').val()==0)
+
+        if(parseFloat(currencyToNumber($('#bayar').val()))-parseFloat($('#subtotal_view1').val())<0)
         {
+            console.log('aaaa');
             toastr.warning('Silahkan masukkan nominal uang!','Peringatan');
             count_err+=1;
         }
@@ -218,7 +220,12 @@ $(document).ready(function() {
 
       })
 
+      $('#cancel').on('click',function(){
+        batal_transaksi($('#nota').val());
+      })
+
 } );
+
 
 
 function delete_data_obat_table(no){
@@ -492,4 +499,29 @@ function delete_data(id)
       }
     // });
   });
+}
+
+function batal_transaksi(nota)
+{
+ if(confirm("Anda yakin akan membatalkan transaksi ini?")){
+    $.getJSON("modules/transaksi/aksi_transaksi.php?module=transaksi&act=batal_transaksi",{nota:nota}, function(result){
+    // $.each(result, function(i, data){
+      // console.log(result);
+      if(result.status==true)
+      {
+        toastr.success(result.msg,'Sukses');
+        setTimeout(function(){location.reload()}, 2000);
+    }
+    else
+    {
+        toastr.warning(result.msg,'Peringatan');
+    }
+    // });
+});
+}
+else
+{
+    return false;
+}
+
 }

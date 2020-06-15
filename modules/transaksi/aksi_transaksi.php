@@ -418,6 +418,45 @@ if($module=='transaksi' && $act=='bayar')
 	header('location:../../module.php?module='.$module);
 }
 
+if($module=='transaksi' && $act=='batal_transaksi')
+{
+	$nota=$_GET['nota'];
+
+	$check_db = mysqli_query($koneksi,"SELECT * FROM table_rekap WHERE nota='$nota' OR transaksi_selesai='N' ORDER BY id_daterek DESC LIMIT 1") or error();
+
+	if (!$check_db) {
+		printf("Error: %s\n", mysqli_error($koneksi));
+		exit();
+	}
+
+	$r=mysqli_fetch_array($check_db);
+
+	if($r>0)
+	{
+		$id_daterek=$r['id_daterek'];
+		$get_detail=mysqli_query($koneksi,"DELETE FROM detail_rekap WHERE id_daterek='$id_daterek'");
+		$get_detail1=mysqli_query($koneksi,"DELETE FROM table_rekap WHERE id_daterek='$id_daterek'");
+
+		if($get_detail1==true && $get_detail==true)
+		{
+			$data=array(
+				'status'=>true,
+				'msg'=>'Transaksi berhasil dihapus!',
+			);
+		}
+	}
+	else
+	{
+		$data=array(
+			'status'=>false,
+			'msg'=>'Transaksi anda belum terekam dalam database!',
+		);
+	}
+
+
+	echo json_encode($data);
+}
+
 function update($table_name, $myarray, $my_wheres,$koneksi) {
     $sql = "UPDATE ".$table_name.
     " SET ";

@@ -37,7 +37,7 @@ error_reporting(E_ALL);
 
 function autocode($koneksi)
 {
-	$query=mysqli_query($koneksi, "SELECT SUBSTR(nota,11,4) as nota FROM table_rekap ORDER BY ABS(nota) DESC");
+	$query=mysqli_query($koneksi, "SELECT SUBSTR(nota,11,4) as nota,tanggal FROM table_rekap ORDER BY ABS(nota) DESC");
 	if (!$query) {
 		printf("Error: %s\n", mysqli_error($koneksi));
 		exit();
@@ -46,18 +46,26 @@ function autocode($koneksi)
 
 	if($r>0)
 	{
-		$kode = intval($r['nota']) + 1; 
-	}
-	else
-	{
-		$kode = 1;
-	}
+        if($r['tanggal']!==date('Y-m-d'))
+        {
+            $kode = 1;
+        }
+        else
+        {
+            $kode = intval($r['nota']) + 1; 
+        }
+    } 
 
-	$tgl=date('dmY'); 
-	$batas = format_kode($kode);   
-	$kodetampil = "PO".$tgl.$batas; 
+    else
+    {
+        $kode = 1;
+    }
 
-	return $kodetampil; 
+    $tgl=date('dmY'); 
+    $batas = format_kode($kode);   
+    $kodetampil = "PO".$tgl.$batas; 
+
+    return $kodetampil; 
 }
 
 function format_kode($value) {
@@ -90,7 +98,6 @@ switch($act)
             exit();
         }
         $r=mysqli_fetch_array($data_keranjang);
-
         ?>
             <div class="row">
                 <div class="col-md-4">
