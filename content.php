@@ -55,6 +55,10 @@ if ($_GET['module'] == 'peramalan') {
 if ($_GET['module'] == 'user') {
     include "modules/user/user.php ";
 }
+
+if ($_GET['module'] == 'stok') {
+    include "modules/stok/stok.php ";
+}
 // Apabila modul tidak ditemukan
 else {
     echo "<p><b>MODUL BELUM ADA ATAU BELUM LENGKAP</b></p>";
