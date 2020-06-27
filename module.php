@@ -47,7 +47,55 @@ header('location:index.php');
 
 <body>
     <!-- Left Panel -->
-      <?php include "navigation.php"; ?>
+            <!-- Left Panel -->
+    <aside id="left-panel" class="left-panel">
+        <nav class="navbar navbar-expand-sm navbar-default">
+            <div id="main-menu" class="main-menu collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="?module=home"><i class="menu-icon fa fa-laptop"></i>HOME</a>
+                    </li>
+
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                        <i class="menu-icon fa fa-file"></i>Olah Data</a>
+                        <ul class="sub-menu children dropdown-menu">    
+                            <li><i class="fa fa-medkit"></i><a href="?module=obat">Daftar Obat</a></li>
+                            <li><i class="fa fa-dropbox"></i><a href="?module=stok">Stok Obat</a></li>
+                            <li><i class="fa fa-id-badge"></i><a href="?module=kategori">Daftar Kategori</a></li>
+                            <li><i class="fa fa-truck"></i><a href="?module=manufaktur">Daftar Manufaktur</a></li>
+
+                        </ul>
+                    </li>
+                    
+                    <li>
+                        <a href="?module=transaksi"> <i class="menu-icon fa fa-barcode"></i> Transaksi </a>
+                    </li>
+
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                        <i class="menu-icon fa fa-table"></i>Laporan & Grafik</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-file-text-o"></i><a href="?module=rekap">Rekap</a></li>
+                            <li><i class="fa fa-book"></i><a href="?module=laporan">Laporan</a></li>
+                            <li><i class="fa fa-bar-chart-o"></i><a href="?module=grafik">Grafik</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="?module=peramalan"> <i class="menu-icon fa fa-magic"></i> Peramalan </a>
+                    </li>
+                    
+                    <li>
+                        <a href="?module=user"> <i class="menu-icon fa fa-group"></i> Akun </a>
+                    </li>
+
+                    
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav>
+    </aside>
+    <!-- /#left-panel -->
     <!-- /#left-panel -->
     <!-- Right Panel -->
     <div id="right-panel" class="right-panel">
@@ -57,6 +105,7 @@ header('location:index.php');
                 <div class="navbar-header">
                     <a class="navbar-brand" href="./"><img src="images/Gilang.png" alt="Logo" height="40px"></a>
                     <a class="navbar-brand hidden" href="./"><img src="images/Gilang.png" alt="Logo"></a>
+                    <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
                  </div>
              
             </div>
@@ -112,11 +161,11 @@ header('location:index.php');
     <script src="https://cdn.jsdelivr.net/npm/jquery.flot@0.8.3/jquery.flot.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flot-spline@0.0.1/js/jquery.flot.spline.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
-    <script src="assets/js/main.js"></script>
+    <!-- <script src="assets/js/main.js"></script> -->
     
     <!--  Chart js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.3/dist/Chart.bundle.min.js"></script>
