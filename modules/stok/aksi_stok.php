@@ -82,7 +82,7 @@ if($module=='stok' && $act=='update')
 				'id_stock'=>$id_stock,
 			);
 
-			$update=update('table_obat',$data1,array('nama_obat'=>$id_stok,'bentuk_obat'=>$bentuk_obat),$koneksi);
+			$update=update('table_obat',$data1,array('nama_obat'=>$id_stok),$koneksi);
 
 			if (!$update) {
 				printf("Error: %s\n", mysqli_error($koneksi));

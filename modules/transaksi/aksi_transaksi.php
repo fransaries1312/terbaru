@@ -14,6 +14,23 @@ function error() {
   die();
 }
 
+if (! function_exists('dd'))
+{
+	/**
+	 * Print all data before being load.
+	 *
+	 * @return bool
+	 */
+	function dd($data)
+	{
+		$elem='<pre>';
+		$elem.=print_r($data);
+		$elem.=die;
+		$elem.='</pre>';
+		return $elem;
+	}
+} 
+
 $module=$_GET['module'];
 $act=$_GET['act'];
 
@@ -44,14 +61,14 @@ if($module=='transaksi' && $act=='cek_stok_barang')
 	$id = $_GET['id'];
 	$data=array();
 
-	$result = mysqli_query($koneksi, "SELECT * FROM stock_obat JOIN table_obat ON table_obat.id_obat=stock_obat.id_obat WHERE table_obat.id_obat='$id' ORDER BY stock_obat.created_at DESC LIMIT 1");
+	$result = mysqli_query($koneksi, "SELECT * FROM stock_obat JOIN table_obat ON table_obat.id_stock=stock_obat.id_stock WHERE table_obat.id_obat='$id' ORDER BY stock_obat.created_at DESC LIMIT 1");
 
 	
 	if(mysqli_num_rows($result)>0)
 	{
 		while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 		 	$data['id']=$row["id_obat"];
-		 	$data['stok']=$row["stock"];
+		 	$data['stok']=floor($row["stock"]/$row['satuan']);
 		 	$data['harga_obat']=$row["harga_obat"];
 		 }
 
@@ -133,40 +150,36 @@ if($module=='transaksi' && $act=='update_stok')
 			$id_detail_rekap=mysqli_fetch_array($get_id)['id'];
 		}
 
-		// $get_last_stok=mysqli_query($koneksi,"SELECT * FROM stock_obat WHERE id_obat='$id_obat' ORDER BY id_stock DESC LIMIT 1");
+		$get_last_stok=mysqli_query($koneksi,"SELECT table_obat.satuan,detail_rekap.jumlah,stock_obat.stock,stock_obat.id_stock FROM stock_obat JOIN table_obat ON table_obat.id_stock=stock_obat.id_stock JOIN detail_rekap ON detail_rekap.id_obat=table_obat.id_obat WHERE detail_rekap.id_rek='$id_detail_rekap' LIMIT 1");
 
-		// if (!$get_last_stok) {
-		// 	printf("Error: %s\n", mysqli_error($koneksi));
-		// 	exit();
-		// }
+		if (!$get_last_stok) {
+			printf("Error: %s\n", mysqli_error($koneksi));
+			exit();
+		}
 
-		// $stok=mysqli_fetch_array($get_last_stok)['stock'];
+		$stok=mysqli_fetch_array($get_last_stok);
 
-		// $last_stok=($stok!==null || $stok!==0)?$stok:0;
+		$id_stok=$stok['id_stock'];
+
+		$last_stok=($stok['stock']!==null || $stok['stock']!==0)?$stok['stock']:0;
+
+		$jumlah=$stok['jumlah'];
+
+		$satuan=$stok['satuan'];
 		
-		// $count_last_stok=$last_stok-$qty;
+		$count_last_stok=$last_stok-($jumlah * $satuan);
 
-		// $data_stok=array(
-		// 	'id_obat'=>$id_obat,
-		// 	'stock'=>$count_last_stok,
-		// 	'created_at'=>date('Y-m-d H:i:s'),
-		// 	'update_at'=>date('Y-m-d H:i:s'),
-		// );
+		$data_stok=array(
+			'stock'=>$count_last_stok,
+			'update_at'=>date('Y-m-d H:i:s'),
+		);
 
-		// $columns = implode(", ",array_keys($data_stok));
+		$update_rekap=update('stock_obat',$data_stok,array('id_stock'=>$id_stok),$koneksi);
 
-		// $escaped_values = array_map(array($koneksi, 'real_escape_string'), array_values($data_stok));
-
-		// $values  = "'" .implode("', '", $escaped_values). "'";
-
-		// $sql = "INSERT INTO stock_obat ($columns) VALUES ($values)";
-
-		// $insert_stok=mysqli_query($koneksi,$sql);
-
-		// if (!$insert_stok) {
-		// 	printf("Error: %s\n", mysqli_error($koneksi));
-		// 	exit();
-		// }
+		if (!$update_rekap) {
+			printf("Error: %s\n", mysqli_error($koneksi));
+			exit();
+		}
 
 		if($insert_detail==true)
 		{
@@ -248,40 +261,36 @@ if($module=='transaksi' && $act=='update_stok')
 			
 		}
 
-		// $get_last_stok=mysqli_query($koneksi,"SELECT * FROM stock_obat WHERE id_obat='$id_obat' ORDER BY id_stock DESC LIMIT 1");
+		$get_last_stok=mysqli_query($koneksi,"SELECT table_obat.satuan,detail_rekap.jumlah,stock_obat.stock,stock_obat.id_stock FROM stock_obat JOIN table_obat ON table_obat.id_stock=stock_obat.id_stock JOIN detail_rekap ON detail_rekap.id_obat=table_obat.id_obat WHERE detail_rekap.id_rek='$id_detail_rekap' LIMIT 1");
 
-		// if (!$get_last_stok) {
-		// 	printf("Error: %s\n", mysqli_error($koneksi));
-		// 	exit();
-		// }
+		if (!$get_last_stok) {
+			printf("Error: %s\n", mysqli_error($koneksi));
+			exit();
+		}
 
-		// $stok=mysqli_fetch_array($get_last_stok)['stock'];
+		$stok=mysqli_fetch_array($get_last_stok);
 
-		// $last_stok=($stok!==null || $stok!==0)?$stok:0;
+		$id_stok=$stok['id_stock'];
+
+		$last_stok=($stok['stock']!==null || $stok['stock']!==0)?$stok['stock']:0;
+
+		$jumlah=$stok['jumlah'];
+
+		$satuan=$stok['satuan'];
 		
-		// $count_last_stok=$last_stok-$qty;
+		$count_last_stok=$last_stok-($jumlah * $satuan);
 
-		// $data_stok=array(
-		// 	'id_obat'=>$id_obat,
-		// 	'stock'=>$count_last_stok,
-		// 	'created_at'=>date('Y-m-d H:i:s'),
-		// 	'update_at'=>date('Y-m-d H:i:s'),
-		// );
+		$data_stok=array(
+			'stock'=>$count_last_stok,
+			'update_at'=>date('Y-m-d H:i:s'),
+		);
 
-		// $columns = implode(", ",array_keys($data_stok));
+		$update_rekap=update('stock_obat',$data_stok,array('id_stock'=>$id_stok),$koneksi);
 
-		// $escaped_values = array_map(array($koneksi, 'real_escape_string'), array_values($data_stok));
-
-		// $values  = "'" .implode("', '", $escaped_values). "'";
-
-		// $sql = "INSERT INTO stock_obat ($columns) VALUES ($values)";
-
-		// $insert_stok=mysqli_query($koneksi,$sql);
-
-		// if (!$insert_stok) {
-		// 	printf("Error: %s\n", mysqli_error($koneksi));
-		// 	exit();
-		// }
+		if (!$update_rekap) {
+			printf("Error: %s\n", mysqli_error($koneksi));
+			exit();
+		}
 		
 
 		if($insert==true && $insert_detail==true)
@@ -306,6 +315,37 @@ if($module=='transaksi' && $act=='update_stok')
 if($module=='transaksi' && $act=='cancel_transaksi')
 {
 	$id_detail=$_GET['id'];
+
+	$get_last_stok=mysqli_query($koneksi,"SELECT table_obat.satuan,detail_rekap.jumlah,stock_obat.stock,stock_obat.id_stock FROM stock_obat JOIN table_obat ON table_obat.id_stock=stock_obat.id_stock JOIN detail_rekap ON detail_rekap.id_obat=table_obat.id_obat WHERE detail_rekap.id_rek='$id_detail' LIMIT 1");
+
+	if (!$get_last_stok) {
+		printf("Error: %s\n", mysqli_error($koneksi));
+		exit();
+	}
+
+	$stok=mysqli_fetch_array($get_last_stok);
+
+	$id_stok=$stok['id_stock'];
+
+	$last_stok=($stok['stock']!==null || $stok['stock']!==0)?$stok['stock']:0;
+
+	$jumlah=$stok['jumlah'];
+
+	$satuan=$stok['satuan'];
+
+	$count_last_stok=$last_stok+($jumlah * $satuan);
+
+	$data_stok=array(
+		'stock'=>$count_last_stok,
+		'update_at'=>date('Y-m-d H:i:s'),
+	);
+
+	$update_rekap=update('stock_obat',$data_stok,array('id_stock'=>$id_stok),$koneksi);
+
+	if (!$update_rekap) {
+		printf("Error: %s\n", mysqli_error($koneksi));
+		exit();
+	}
 
 	$get_detail=mysqli_query($koneksi,"DELETE FROM detail_rekap WHERE id_rek='$id_detail'");
 	
@@ -434,6 +474,38 @@ if($module=='transaksi' && $act=='batal_transaksi')
 	if($r>0)
 	{
 		$id_daterek=$r['id_daterek'];
+
+		$get_last_stok=mysqli_query($koneksi,"SELECT table_obat.satuan,detail_rekap.jumlah,stock_obat.stock,stock_obat.id_stock FROM stock_obat JOIN table_obat ON table_obat.id_stock=stock_obat.id_stock JOIN detail_rekap ON detail_rekap.id_obat=table_obat.id_obat WHERE detail_rekap.id_daterek='$id_daterek'");
+
+		if (!$get_last_stok) {
+			printf("Error: %s\n", mysqli_error($koneksi));
+			exit();
+		}
+
+		$stok=mysqli_fetch_array($get_last_stok);
+
+		$id_stok=$stok['id_stock'];
+
+		$last_stok=($stok['stock']!==null || $stok['stock']!==0)?$stok['stock']:0;
+
+		$jumlah=$stok['jumlah'];
+
+		$satuan=$stok['satuan'];
+		
+		$count_last_stok=$last_stok-($jumlah * $satuan);
+
+		$data_stok=array(
+			'stock'=>$count_last_stok,
+			'update_at'=>date('Y-m-d H:i:s'),
+		);
+
+		$update_rekap=update('stock_obat',$data_stok,array('id_stock'=>$id_stok),$koneksi);
+
+		if (!$update_rekap) {
+			printf("Error: %s\n", mysqli_error($koneksi));
+			exit();
+		}
+
 		$get_detail=mysqli_query($koneksi,"DELETE FROM detail_rekap WHERE id_daterek='$id_daterek'");
 		$get_detail1=mysqli_query($koneksi,"DELETE FROM table_rekap WHERE id_daterek='$id_daterek'");
 
