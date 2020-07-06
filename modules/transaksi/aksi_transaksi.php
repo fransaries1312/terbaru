@@ -482,28 +482,39 @@ if($module=='transaksi' && $act=='batal_transaksi')
 			exit();
 		}
 
-		$stok=mysqli_fetch_array($get_last_stok);
 
-		$id_stok=$stok['id_stock'];
+		while ($stok = mysqli_fetch_array($get_last_stok)) 
+		{
+			$id_stok=$stok['id_stock'];
 
-		$last_stok=($stok['stock']!==null || $stok['stock']!==0)?$stok['stock']:0;
+			$get_stok_nom=mysqli_query($koneksi,"SELECT * FROM stock_obat WHERE id_stock='$id_stok'");
 
-		$jumlah=$stok['jumlah'];
+			if (!$get_stok_nom) {
+				printf("Error: %s\n", mysqli_error($koneksi));
+				exit();
+			}
 
-		$satuan=$stok['satuan'];
-		
-		$count_last_stok=$last_stok-($jumlah * $satuan);
+			$stok_jum=mysqli_fetch_array($get_stok_nom);
 
-		$data_stok=array(
-			'stock'=>$count_last_stok,
-			'update_at'=>date('Y-m-d H:i:s'),
-		);
+			$last_stok=($stok_jum['stock']!==null || $stok_jum['stock']!==0)?$stok_jum['stock']:0;
 
-		$update_rekap=update('stock_obat',$data_stok,array('id_stock'=>$id_stok),$koneksi);
+			$jumlah=$stok['jumlah'];
 
-		if (!$update_rekap) {
-			printf("Error: %s\n", mysqli_error($koneksi));
-			exit();
+			$satuan=$stok['satuan'];
+
+			$count_last_stok=$last_stok+($jumlah * $satuan);
+
+			$data_stok=array(
+				'stock'=>$count_last_stok,
+				'update_at'=>date('Y-m-d H:i:s'),
+			);
+
+			$update_rekap=update('stock_obat',$data_stok,array('id_stock'=>$id_stok),$koneksi);
+
+			if (!$update_rekap) {
+				printf("Error: %s\n", mysqli_error($koneksi));
+				exit();
+			}
 		}
 
 		$get_detail=mysqli_query($koneksi,"DELETE FROM detail_rekap WHERE id_daterek='$id_daterek'");

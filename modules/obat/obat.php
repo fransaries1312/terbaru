@@ -1,4 +1,19 @@
+<script type="text/javascript" src="http://code.jquery.com/jquery-3.0.0.min.js"></script>
+<script>
+    $(function(){
+        <?php
+        // toastr output & session reset
+        session_start();
+        if(isset($_SESSION['toastr']))
+        {
+            echo 'toastr.'.$_SESSION['toastr']['type'].'("'.$_SESSION['toastr']['message'].'", "'.$_SESSION['toastr']['title'].'")';
+            unset($_SESSION['toastr']);
+        }
+        ?>          
+    });
+</script> 
 <?php
+
 $aksi = "modules/obat/aksi_obat.php";
 $act = $_GET['act'];
 switch ($act) {
@@ -269,13 +284,13 @@ switch ($act) {
                                         <label for="id_kategori" class=" form-control-label">Kategori Obat</label></div>
                                     <div class="col-12 col-md-9">
                                         <select name="id_kategori" id="id_kategori" class="form-control">
-                                            <option value="<?php echo $r[id_kategori]; ?>"><?php echo $r[id_kategori]; ?></option>
+                                            <option value="">Silahkan Pilih</option>
                                             <?php
                                             $tampil = mysqli_query($koneksi, "SELECT * FROM kategori_obat");
 
-                                            while ($r = mysqli_fetch_array($tampil)) {
+                                            while ($d = mysqli_fetch_array($tampil)) {
                                                 ?>
-                                                <option value="<?= $r['id_kategori'] ?>"><?= $r['kode_kategori'] ?><?=': '?><?= $r['nama_kategori'] ?></option>
+                                                <option value="<?= $d['id_kategori'] ?>" <?= $r['id_kategori'] == $d['id_kategori']?'selected':''?> ><?= $d['kode_kategori'] ?><?=': '?><?= $d['nama_kategori'] ?></option>
                                                 <?php
                                             }
                                             ?>
@@ -289,13 +304,13 @@ switch ($act) {
                                         <label for="id_manufaktur" class=" form-control-label">Manufaktur Obat</label></div>
                                     <div class="col-12 col-md-9">
                                         <select name="id_manufaktur" id="id_manufaktur" class="form-control">
-                                            <option value="<?php echo $r[id_manufaktur]; ?>"><?php echo $r[id_manufaktur]; ?></option>
+                                           <option value="">Silahkan Pilih</option>
                                             <?php
                                             $tampil = mysqli_query($koneksi, "SELECT * FROM manufaktur_obat");
 
-                                            while ($r = mysqli_fetch_array($tampil)) {
+                                            while ($d = mysqli_fetch_array($tampil)) {
                                                 ?>
-                                                <option value="<?= $r['id_manufaktur'] ?>"><?= $r['kode_manufaktur'] ?><?=': '?><?= $r['nama_manufaktur'] ?></option>
+                                                <option value="<?= $d['id_manufaktur'] ?>" <?= $r['id_manufaktur'] == $d['id_manufaktur']?'selected':''?>><?= $d['kode_manufaktur'] ?><?=': '?><?= $d['nama_manufaktur'] ?></option>
                                                 <?php
                                             }
                                             ?>

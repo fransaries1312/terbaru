@@ -146,7 +146,7 @@ switch ($act) {
                                          
                                             while ($r = mysqli_fetch_array($bentuk_obat)) {
                                                 ?>
-                                                <option value="<?= $r['bentuk_obat'] ?>"><?= $r['bentuk_obat'] ?></option>
+                                                <option value="<?= $r['satuan'] ?>"><?= $r['bentuk_obat'] ?></option>
                                                 <?php
                                             }
                                             ?>

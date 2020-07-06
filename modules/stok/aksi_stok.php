@@ -39,17 +39,21 @@ if($module=='stok' && $act=='update')
 	$bentuk_obat=$_POST['bentuk_obat'];
 	$id_stok=$_POST['id_stok'];
 
-	$check_db = mysqli_query($koneksi,"SELECT * FROM table_obat WHERE nama_obat='$id_stok' AND bentuk_obat='$bentuk_obat' LIMIT 1") or error();
+	// $check_db = mysqli_query($koneksi,"SELECT * FROM table_obat WHERE nama_obat LIKE '%$id_stok%' AND bentuk_obat='$bentuk_obat' LIMIT 1") or error();
+
+	$check_db = mysqli_query($koneksi,"SELECT * FROM table_obat WHERE nama_obat LIKE '%$id_stok%'") or error();
 
 	if (!$check_db) {
 		printf("Error: %s\n", mysqli_error($koneksi));
 		exit();
 	}
+
 	$r=mysqli_fetch_array($check_db);
 	if($r>0)
 	{
 		if($r['id_stock']==null)
 		{
+			dd('aaaaa');
 			$data=array(
 				'stock'=>$jumlah * $r['satuan'],
 				'created_at'=>date('Y-m-d H:i:s'),
@@ -79,10 +83,15 @@ if($module=='stok' && $act=='update')
 			}
 
 			$data1=array(
-				'id_stock'=>$id_stock,
-			);
+					'id_stock'=>$id_stock,
+			);	
 
-			$update=update('table_obat',$data1,array('nama_obat'=>$id_stok),$koneksi);
+			$obat = mysqli_query($koneksi,"SELECT * FROM table_obat WHERE nama_obat LIKE '%$id_stok%'") or error();	
+
+			while ($obat = mysqli_fetch_array($obat)) 
+			{
+				$update=update('table_obat',$data1,array('id_obat'=>$obat['id_obat']),$koneksi);
+			}
 
 			if (!$update) {
 				printf("Error: %s\n", mysqli_error($koneksi));
@@ -110,6 +119,23 @@ if($module=='stok' && $act=='update')
 		else
 		{
 			$id=$r['id_stock'];
+
+			$data1=array(
+					'id_stock'=>$id,
+			);	
+
+			$a = mysqli_query($koneksi,"SELECT * FROM table_obat WHERE nama_obat LIKE '%$id_stok%'") or error();	
+
+			while ($obat = mysqli_fetch_array($a)) 
+			{
+				$update=update('table_obat',$data1,array('id_obat'=>$obat['id_obat']),$koneksi);
+			}	
+
+			if (!$update) {
+				printf("Error: %s\n", mysqli_error($koneksi));
+				exit();
+			}
+
 			$get_stok = mysqli_query($koneksi,"SELECT * FROM stock_obat WHERE id_stock='$id' LIMIT 1") or error();
 
 			if (!$get_stok) {
@@ -121,11 +147,11 @@ if($module=='stok' && $act=='update')
 
 			if(isset($_POST['tambah']) && $_POST['tambah']=='+')
 			{
-				$total=intval($stok['stock'])+(intval($jumlah) * $r['satuan']);
+				$total=intval($stok['stock'])+(intval($jumlah) * $_POST['bentuk_obat']);
 			}
 			else
 			{
-				$total=intval($stok['stock'])-(intval($jumlah) * $r['satuan']);
+				$total=intval($stok['stock'])-(intval($jumlah) * $_POST['bentuk_obat']);
 			}
 
 			if($total<0)
