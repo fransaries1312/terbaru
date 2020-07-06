@@ -53,7 +53,6 @@ if($module=='stok' && $act=='update')
 	{
 		if($r['id_stock']==null)
 		{
-			dd('aaaaa');
 			$data=array(
 				'stock'=>$jumlah * $r['satuan'],
 				'created_at'=>date('Y-m-d H:i:s'),
