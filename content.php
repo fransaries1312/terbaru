@@ -54,7 +54,7 @@ if ($_GET['module'] == 'peramalan') {
 // Bagian user akun
 if ($_GET['module'] == 'user') {
     include "modules/user/user.php ";
-}
+}else
 
 if ($_GET['module'] == 'stok') {
     include "modules/stok/stok.php ";

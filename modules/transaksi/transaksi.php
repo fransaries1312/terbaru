@@ -308,8 +308,53 @@ switch($act)
                     </div>
 
 
-                </div>
+                </div>               
+
             </div><!-- .animated -->
+                <!-- table rekap -->
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title">Tabel Rekap Penjualan</strong>
+                            
+                        </div>
+                        <div class="card-body">
+                            <table id="bootstrap-data-table" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr >
+                                        <th>No</th>
+                                        <th>Nota</th>
+                                        <th>Tanggal</th>
+                                        <th>Aksi</th>
+                                        </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $tampil = mysqli_query($koneksi, "SELECT table_rekap.nota, table_rekap.created_at, table_obat.nama_obat, table_obat.bentuk_obat, detail_rekap.jumlah, table_obat.harga_obat FROM detail_rekap JOIN table_obat ON detail_rekap.id_obat=table_obat.id_obat JOIN table_rekap ON detail_rekap.id_daterek=table_rekap.id_daterek GROUP BY table_rekap.nota ORDER BY table_rekap.created_at DESC");
+                                    $no = 1;
+                                    while ($r = mysqli_fetch_array($tampil)) {
+                                        ?>
+                                        <tr>
+                                            <td><?= $no++ ?></td>
+                                            <td><?= $r['nota'] ?></td>
+                                            <td><?= $r['created_at'] ?></td>
+                                            <td>
+                                                <a href="?module=rekap&act=edit&id=<?php echo $r[id_rek]; ?>" type="button" class="btn btn-outline-warning"><i class="fa fa-pencil"></i></a>
+                                                <a href="<?= $aksi ?>?module=rekap&act=delete&id=<?php echo $r[id_rek]; ?>" type="button" class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                    }
+                                    ?>
+
+                                </tbody>
+                            </table>
+                            <div class="card-footer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
         </div><!-- .content -->
         
         <script type="text/javascript">
