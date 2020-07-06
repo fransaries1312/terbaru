@@ -95,6 +95,14 @@ switch ($act) {
                                         <small class="form-text text-muted">Masukan bentuk obat</small></div>
                                 </div>
 
+                                 <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label for="text-input" class=" form-control-label">Satuan Obat</label></div>
+                                    <div class="col-12 col-md-9">
+                                        <input type="text" id="text-input" name="satuan" placeholder="satuan jual" class="form-control">
+                                        <small class="form-text text-muted">Masukan satuan jual obat</small></div>
+                                </div>
+
                                 <div class="row form-group">
                                     <div class="col col-md-3">
                                         <label for="select" class=" form-control-label">Segmentasi Obat</label></div>
@@ -151,13 +159,15 @@ switch ($act) {
                                     </div>
                                 </div>
                                 
-                                 <div class="row form-group">
+                                <div class="row form-group">
                                     <div class="col col-md-3"><label for="text-input" class=" form-control-label">Harga Obat</label></div>
                                     <div class="col-12 col-md-9">
                                         <input type="number" id="harga_obat" name="harga_obat" class="form-control">
                                         <span class="help-block" style="color:red"></span></div>
                                 </div>
                                 
+                               <!--  <input type="hidden" id="text-input" name="id_stock" class="form-control" value=NULL> -->
+
                                 <div class="row form-group">
                                     <div class="col col-md-3">
                                         <label for="text-input" class=" form-control-label">Kode Obat</label></div>
@@ -194,54 +204,107 @@ switch ($act) {
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>INPUT</strong> Data Obat
+                            <strong>EDIT</strong> Data Obat
                         </div>
                         <div class="card-body card-block">
                             <form action="<?= $aksi ?>?module=obat&act=update" method="POST"  class="form-horizontal">
+
+                                 <input type="hidden" id="text-input" name="id_obat" class="form-control" value="<?php echo $r[id_obat]; ?>">
 
                                 <div class="row form-group">
                                     <div class="col col-md-3">
                                         <label for="text-input" class=" form-control-label">Kode Obat</label></div>
                                     <div class="col-12 col-md-9">
-                                        <input type="text" id="text-input" name="id_obat" class="form-control" value="<?php echo $r[id_obat]; ?>" >
-                                        <small class="form-text text-muted">Masukan kode obat</small></div>
+                                        <input type="text" id="text-input" name="kode_obat" class="form-control" value="<?php echo $r[kode_obat]; ?>" >
+                                        <small class="form-text text-muted">cek kode obat</small></div>
                                 </div>
                                 
                                 <div class="row form-group">
                                     <div class="col col-md-3"><label for="text-input" class=" form-control-label">Nama Obat</label></div>
                                     <div class="col-12 col-md-9">
                                         <input type="text" id="text-input" name="nama_obat" class="form-control" value="<?php echo $r[nama_obat]; ?>">
-                                        <small class="form-text text-muted">Masukan nama obat</small></div>
+                                        <small class="form-text text-muted">cek nama obat</small></div>
                                 </div>
 
                                 <div class="row form-group">
-                                    <div class="col col-md-3"><label for="text-input" class=" form-control-label">Golongan Obat</label></div>
+                                    <div class="col col-md-3"><label for="text-input" class=" form-control-label">Bentu Obat</label></div>
                                     <div class="col-12 col-md-9">
-                                        <input type="text" id="text-input" name="golongan_obat" class="form-control" value="<?php echo $r[golongan_obat]; ?>">
-                                        <small class="form-text text-muted"></small></div>
+                                        <input type="text" id="text-input" name="bentuk_obat" class="form-control" value="<?php echo $r[bentuk_obat]; ?>">
+                                        <small class="form-text text-muted">cek bentuk obat</small></div>
                                 </div>
 
                                 <div class="row form-group">
-                                    <div class="col col-md-3"><label for="select" class=" form-control-label">Kategori Obat</label></div>
+                                    <div class="col col-md-3"><label for="select" class=" form-control-label">Segmentasi Obat</label></div>
                                     <div class="col-12 col-md-9">
-                                        <select name="kategori_obat" id="select" class="form-control">
-                                            <option value="">Pilih Kategori</option>
-                                            <option value="obat bebas" <?php echo $r[kategori_obat] == 'obat bebas' ? 'selected' : NULL; ?> >obat bebas </option>
-                                            <option value="obat resep" <?php echo $r[kategori_obat] == 'obat resep' ? 'selected' : NULL; ?> >obat resep </option>
-                                            <option value="obat keras" <?php echo $r[kategori_obat] == 'obat keras' ? 'selected' : NULL; ?> >obat keras </option>
-                                           
+                                        <select name="segmentasi_obat" id="select" class="form-control">
+                                            <option value="<?php echo $r[segmentasi_obat]; ?>"><?php echo $r[segmentasi_obat]; ?></option>
+                                            <option value="obat bebas">OB</option>
+                                            <option value="obat bebas terbatas">OBT</option>
+                                            <option value="obat keras">OK</option>
+                                            <option value="obat herbal">OH</option>
+                                            <option value="obat over the counter">OTC</option>
+                                            <option value="lainnya">Lainnya</option>
                                         </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="row form-group">
+                                    <div class="col col-md-3"><label for="text-input" class=" form-control-label">Satuan Obat</label></div>
+                                    <div class="col-12 col-md-9">
+                                        <input type="text" id="text-input" name="satuan" class="form-control" value="<?php echo $r[satuan]; ?>">
+                                        <small class="form-text text-muted">cek satuan obat</small></div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label for="text-input" class=" form-control-label">Kode Obat</label></div>
+                                    <div class="col-12 col-md-9">
+                                        <input type="text" id="text-input" name="harga_obat" class="form-control" value="<?php echo $r[harga_obat]; ?>" >
+                                        <small class="form-text text-muted">cek harga obat</small></div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label for="id_kategori" class=" form-control-label">Kategori Obat</label></div>
+                                    <div class="col-12 col-md-9">
+                                        <select name="id_kategori" id="id_kategori" class="form-control">
+                                            <option value="<?php echo $r[id_kategori]; ?>"><?php echo $r[id_kategori]; ?></option>
+                                            <?php
+                                            $tampil = mysqli_query($koneksi, "SELECT * FROM kategori_obat");
+
+                                            while ($r = mysqli_fetch_array($tampil)) {
+                                                ?>
+                                                <option value="<?= $r['id_kategori'] ?>"><?= $r['kode_kategori'] ?><?=': '?><?= $r['nama_kategori'] ?></option>
+                                                <?php
+                                            }
+                                            ?>
+                                        </select>
+                                        
                                     </div>
                                 </div>
 
                                 <div class="row form-group">
                                     <div class="col col-md-3">
-                                        <label for="textarea-input" class=" form-control-label">Manfaat Obat</label></div>
+                                        <label for="id_manufaktur" class=" form-control-label">Manufaktur Obat</label></div>
                                     <div class="col-12 col-md-9">
-                                        <textarea name="manfaat" id="textarea-input" rows="6"  class="form-control" ><?php echo $r[manfaat]; ?></textarea></div>
+                                        <select name="id_manufaktur" id="id_manufaktur" class="form-control">
+                                            <option value="<?php echo $r[id_manufaktur]; ?>"><?php echo $r[id_manufaktur]; ?></option>
+                                            <?php
+                                            $tampil = mysqli_query($koneksi, "SELECT * FROM manufaktur_obat");
+
+                                            while ($r = mysqli_fetch_array($tampil)) {
+                                                ?>
+                                                <option value="<?= $r['id_manufaktur'] ?>"><?= $r['kode_manufaktur'] ?><?=': '?><?= $r['nama_manufaktur'] ?></option>
+                                                <?php
+                                            }
+                                            ?>
+                                        </select>
+                                        
+                                    </div>
                                 </div>
-                                <input type="hidden" id="text-input" name="id_obat" class="form-control" value="<?php echo $r[id_obat]; ?>">
-                                
+                                                              
+                               
                                 <div class="card-footer">
                                     <button type="submit" class="btn btn-primary btn-sm">
                                         <i class="fa fa-dot-circle-o"></i> Submit
