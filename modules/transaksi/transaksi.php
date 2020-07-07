@@ -325,12 +325,18 @@ switch($act)
                                         <th>No</th>
                                         <th>Nota</th>
                                         <th>Tanggal</th>
+                                        <th>Subtotal</th>
+                                        <th>Bayar</th>
+                                        <th>Kembali</th>
                                         <th>Aksi</th>
                                         </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $tampil = mysqli_query($koneksi, "SELECT table_rekap.nota, table_rekap.created_at, table_obat.nama_obat, table_obat.bentuk_obat, detail_rekap.jumlah, table_obat.harga_obat FROM detail_rekap JOIN table_obat ON detail_rekap.id_obat=table_obat.id_obat JOIN table_rekap ON detail_rekap.id_daterek=table_rekap.id_daterek GROUP BY table_rekap.nota ORDER BY table_rekap.created_at DESC");
+                                    $total=0;
+                                    $bayar=0;
+                                    $kembali=0;
+                                    $tampil = mysqli_query($koneksi, "SELECT table_rekap.id_daterek,table_rekap.subtotal,table_rekap.bayar,table_rekap.kembali,table_rekap.nota, table_rekap.created_at, table_obat.nama_obat, table_obat.bentuk_obat, detail_rekap.jumlah, table_obat.harga_obat FROM detail_rekap JOIN table_obat ON detail_rekap.id_obat=table_obat.id_obat JOIN table_rekap ON detail_rekap.id_daterek=table_rekap.id_daterek WHERE table_rekap.transaksi_selesai='Y' GROUP BY table_rekap.nota ORDER BY table_rekap.created_at DESC");
                                     $no = 1;
                                     while ($r = mysqli_fetch_array($tampil)) {
                                         ?>
@@ -338,16 +344,32 @@ switch($act)
                                             <td><?= $no++ ?></td>
                                             <td><?= $r['nota'] ?></td>
                                             <td><?= $r['created_at'] ?></td>
+                                            <td>Rp.&nbsp<?= number_format($r['subtotal'],0,',','.') ?></td>
+                                            <td>Rp.&nbsp<?= number_format($r['bayar'],0,',','.') ?></td>
+                                            <td>Rp.&nbsp<?= number_format($r['kembali'],0,',','.') ?></td>
                                             <td>
-                                                <a href="?module=rekap&act=edit&id=<?php echo $r[id_rek]; ?>" type="button" class="btn btn-outline-warning"><i class="fa fa-pencil"></i></a>
-                                                <a href="<?= $aksi ?>?module=rekap&act=delete&id=<?php echo $r[id_rek]; ?>" type="button" class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+                                                <a href="?module=rekap&act=detail_transaksi&id=<?php echo $r['id_daterek']; ?>" type="button" class="btn btn-outline-warning"><i class="fa fa-eye"></i></a>
+                                                <a href="<?= $aksi ?>?module=transaksi&act=delete&id=<?php echo $r['id_daterek']; ?>" type="button" class="btn btn-outline-danger hapus"><i class="fa fa-trash"></i></a>
                                             </td>
                                         </tr>
                                         <?php
-                                    }
+                                   $total+= $r['subtotal'];
+                                   $bayar+= $r['bayar'];
+                                   $kembali+= $r['kembali'];
+
+                               }
                                     ?>
 
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3"><b>Total</b></td>
+                                        <td><b>Rp.&nbsp<?= number_format($total,0,',','.') ?></b></td>
+                                        <td><b>Rp.&nbsp<?= number_format($bayar,0,',','.') ?></b></td>
+                                        <td><b>Rp.&nbsp<?= number_format($kembali,0,',','.') ?></b></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
                             </table>
                             <div class="card-footer">
                             </div>
@@ -359,8 +381,18 @@ switch($act)
         
         <script type="text/javascript">
         	$(document).ready(function(){
-        		
-        	})
+                $('.hapus').click(function(){
+                    var con=confirm("Apakah anda yakin akan menghapus transaksi ini?");
+                    if(con==true)
+                    {
+                        return true;
+                    } 
+                    else
+                    {
+                        return false;
+                    }
+                })
+            })
         </script>
 <?php
 }

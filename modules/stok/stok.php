@@ -77,7 +77,7 @@ switch ($act) {
                                          
                                             while ($r = mysqli_fetch_array($bentuk_obat)) {
                                                 ?>
-                                                <option value="<?= $r['bentuk_obat'] ?>"><?= $r['bentuk_obat'] ?></option>
+                                                <option value="<?= $r['bentuk_obat'] ?>"><?= $r['bentuk_obat'] ?>&nbspSatuan:<?= $r['satuan'] ?></option>
                                                 <?php
                                             }
                                             ?>
@@ -146,7 +146,7 @@ switch ($act) {
                                          
                                             while ($r = mysqli_fetch_array($bentuk_obat)) {
                                                 ?>
-                                                <option value="<?= $r['satuan'] ?>"><?= $r['bentuk_obat'] ?></option>
+                                                <option value="<?= $r['satuan'] ?>"><?= $r['bentuk_obat'] ?>&nbspSatuan:<?= $r['satuan'] ?></option>
                                                 <?php
                                             }
                                             ?>
@@ -197,9 +197,6 @@ switch ($act) {
                                 </thead>
                                 <tbody> 
                                 	<?php  
-                            
-                                        	
-
                                 	$tampil = mysqli_query($koneksi, "SELECT table_obat.id_stock,table_obat.nama_obat,kategori_obat.nama_kategori, manufaktur_obat.nama_manufaktur,table_obat.bentuk_obat FROM table_obat JOIN kategori_obat ON kategori_obat.id_kategori=table_obat.id_kategori JOIN manufaktur_obat ON manufaktur_obat.id_manufaktur=table_obat.id_manufaktur LEFT JOIN stock_obat on stock_obat.id_stock=table_obat.id_stock GROUP BY table_obat.nama_obat");
                                 
                                 	$no = 1;
@@ -228,8 +225,47 @@ switch ($act) {
                                     ?>
                                 </tbody>
                             </table>
-                            <div class="card-footer">
+                            <br/>
+                            <div class="card-header">
+                                <strong class="card-title">Daftar Obat Stocknya Masih Null</strong>
                             </div>
+                            <div class="card-body">
+                             <table id="bootstrap-data-table" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr >
+                                        <th>No</th>
+                                        <th>Kode Obat</th>
+                                        <th>Nama Obat</th>
+                                        <th>Bentuk Obat</th>
+                                        <th>Kategori Obat</th>
+                                        <th>Manufaktur</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php  
+                                    $tampil = mysqli_query($koneksi, "SELECT table_obat.kode_obat,table_obat.id_stock,table_obat.nama_obat,kategori_obat.nama_kategori, manufaktur_obat.nama_manufaktur,table_obat.bentuk_obat FROM table_obat JOIN kategori_obat ON kategori_obat.id_kategori=table_obat.id_kategori JOIN manufaktur_obat ON manufaktur_obat.id_manufaktur=table_obat.id_manufaktur LEFT JOIN stock_obat on stock_obat.id_stock=table_obat.id_stock WHERE table_obat.id_stock IS NULL GROUP BY table_obat.nama_obat");
+                                
+                                    $no = 1;
+                                    if(mysqli_num_rows($tampil)== 0){
+                                        echo "<tr><td colspan='6' style='text-align:center'>Data Kosong</td></tr>";
+                                 }
+                                 else{
+                                   while ($r = mysqli_fetch_array($tampil)) {
+                                    ?>
+                                    <tr>
+                                        <td><?= $no?></td>
+                                        <td><?= $r['kode_obat']?></td>
+                                        <td><?= $r['nama_obat']?></td>
+                                        <td><?= $r['bentuk_obat']?></td>
+                                        <td><?= $r['nama_kategori']?></td>
+                                        <td><?= $r['nama_manufaktur']?></td>  
+                                    </tr>
+                                    <?php
+                                    $no++;}}
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
                         </div>
                     </div>
                 </div>

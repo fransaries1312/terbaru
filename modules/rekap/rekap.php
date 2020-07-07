@@ -4,6 +4,10 @@ $aksi = "modules/rekap/aksi_rekap.php";
 $act = $_GET['act'];
 switch ($act) {
     // Tampil Rekap Data Penjualan
+    case 'detail_transaksi':
+    print_r('aaaaaa');
+    die;
+    break;
     default:
         ?>
 
