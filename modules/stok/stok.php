@@ -21,19 +21,19 @@ error_reporting(E_ALL);
 
 if (! function_exists('dd'))
 {
-	/**
-	 * Print all data before being load.
-	 *
-	 * @return bool
-	 */
-	function dd($data)
-	{
-		$elem='<pre>';
-		$elem.=print_r($data);
-		$elem.=die;
-		$elem.='</pre>';
-		return $elem;
-	}
+    /**
+     * Print all data before being load.
+     *
+     * @return bool
+     */
+    function dd($data)
+    {
+        $elem='<pre>';
+        $elem.=print_r($data);
+        $elem.=die;
+        $elem.='</pre>';
+        return $elem;
+    }
 } 
 
 switch ($act) {
@@ -46,8 +46,8 @@ switch ($act) {
     // $data_stok=mysqli_fetch_array($bentuk_obat);
     // if(isset($data_stok) && $data_stok['id_stock']!==null)
     // {
-    // 	$get_stok=mysqli_query($koneksi,"SELECT * from stock_obat WHERE id_stock='".$data_stok['id_stock']."'");
-    // 	$jumlah= mysqli_fetch_array($get_stok)['stock'];
+    //  $get_stok=mysqli_query($koneksi,"SELECT * from stock_obat WHERE id_stock='".$data_stok['id_stock']."'");
+    //  $jumlah= mysqli_fetch_array($get_stok)['stock'];
     // }
     // dd($id_stok);
     ?>
@@ -82,7 +82,7 @@ switch ($act) {
                                             }
                                             ?>
                                         </select>
-                                  		<span class="help-block" style="color:red"></span>
+                                        <span class="help-block" style="color:red"></span>
                                     </div>
                                 </div>  
                                 <input type="hidden" name="id_stok" id="id_stok" value="<?=$id_stok?>">                                                           
@@ -196,29 +196,29 @@ switch ($act) {
                                      </tr>
                                 </thead>
                                 <tbody> 
-                                	<?php  
-                                	$tampil = mysqli_query($koneksi, "SELECT table_obat.id_stock,table_obat.nama_obat,kategori_obat.nama_kategori, manufaktur_obat.nama_manufaktur,table_obat.bentuk_obat FROM table_obat JOIN kategori_obat ON kategori_obat.id_kategori=table_obat.id_kategori JOIN manufaktur_obat ON manufaktur_obat.id_manufaktur=table_obat.id_manufaktur LEFT JOIN stock_obat on stock_obat.id_stock=table_obat.id_stock GROUP BY table_obat.nama_obat");
+                                    <?php  
+                                    $tampil = mysqli_query($koneksi, "SELECT table_obat.id_stock,table_obat.nama_obat,kategori_obat.nama_kategori, manufaktur_obat.nama_manufaktur,table_obat.bentuk_obat FROM table_obat JOIN kategori_obat ON kategori_obat.id_kategori=table_obat.id_kategori JOIN manufaktur_obat ON manufaktur_obat.id_manufaktur=table_obat.id_manufaktur LEFT JOIN stock_obat on stock_obat.id_stock=table_obat.id_stock GROUP BY table_obat.nama_obat");
                                 
-                                	$no = 1;
-                                	 while ($r = mysqli_fetch_array($tampil)) {
+                                    $no = 1;
+                                     while ($r = mysqli_fetch_array($tampil)) {
                                         ?>
                                         <tr>
-                                        	<td><?= $no?></td>
-                                        	<td><?= $r['nama_obat']?></td>
-                                        	<td><?= $r['nama_kategori']?></td>
-                                        	<td><?= $r['nama_manufaktur']?></td>
-                                        	<?php
-                                        	$select_stok=mysqli_query($koneksi,"SELECT coalesce(SUM(stock),0) AS stock FROM stock_obat WHERE id_stock='".$r['id_stock']."'");
-                                        	$d = mysqli_fetch_array($select_stok); 
-                                        	?>
-                                        	<td><?= isset($d['stock']) && !empty($d['stock'])?$d['stock']:0?></td>
-                                        	<td>
-                                        		<?php if(isset($d['stock']) && !empty($d['stock'])){?>
-                                        		<a href="?module=stok&act=edit&id=<?php echo $r['nama_obat']; ?>" type="button" class="btn btn-primary"><i class="fa fa-pencil"></i> Update Data</a>
-                                        	<?php }else{?>
-                                        		<a href="?module=stok&act=update&id=<?php echo $r['nama_obat']; ?>" type="button" class="btn btn-outline-primary"><i class="fa fa-pencil"></i> Set Data</a>
-                                        	<?php }?>
-                                        	</td>
+                                            <td><?= $no?></td>
+                                            <td><?= $r['nama_obat']?></td>
+                                            <td><?= $r['nama_kategori']?></td>
+                                            <td><?= $r['nama_manufaktur']?></td>
+                                            <?php
+                                            $select_stok=mysqli_query($koneksi,"SELECT coalesce(SUM(stock),0) AS stock FROM stock_obat WHERE id_stock='".$r['id_stock']."'");
+                                            $d = mysqli_fetch_array($select_stok); 
+                                            ?>
+                                            <td><?= isset($d['stock']) && !empty($d['stock'])?$d['stock']:0?></td>
+                                            <td>
+                                                <?php if(isset($d['stock']) && !empty($d['stock'])){?>
+                                                <a href="?module=stok&act=edit&id=<?php echo $r['nama_obat']; ?>" type="button" class="btn btn-primary"><i class="fa fa-pencil"></i> Update Data</a>
+                                            <?php }else{?>
+                                                <a href="?module=stok&act=update&id=<?php echo $r['nama_obat']; ?>" type="button" class="btn btn-outline-primary"><i class="fa fa-pencil"></i> Set Data</a>
+                                            <?php }?>
+                                            </td>
                                         </tr>
                                    <?php
                                     $no++;}

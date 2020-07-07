@@ -13,20 +13,20 @@
     });
 </script> 
 <style>
-	.typeahead { border: 2px solid #FFF;border-radius: 4px;padding: 8px 12px;max-width: 250px;min-width: 150px;background: rgba(66, 52, 52, 0.5);color: #FFF;font-size: 10pt;}
-	.tt-menu { width:100px; }
-	ul.typeahead{margin:0px;padding:10px 0px;}
-	ul.typeahead.dropdown-menu li a {padding: 10px !important;	border-bottom:#CCC 1px solid;color:#FFF;font-size:11pt;}
-	ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; }
-	.bgcolor {max-width: 550px;min-width: 290px;max-height:340px;padding: 100px 10px 130px;border-radius:4px;text-align:center;margin:10px;}
-	.demo-label {font-size:1.5em;color: #686868;font-weight: 500;color:#FFF;}
-	.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover {
-		text-decoration: none;
-		background-color: #1f3f41;
-		outline: 0;
-		font-size: 8pt;
-	}
-</style>	
+    .typeahead { border: 2px solid #FFF;border-radius: 4px;padding: 8px 12px;max-width: 250px;min-width: 150px;background: rgba(66, 52, 52, 0.5);color: #FFF;font-size: 10pt;}
+    .tt-menu { width:100px; }
+    ul.typeahead{margin:0px;padding:10px 0px;}
+    ul.typeahead.dropdown-menu li a {padding: 10px !important;  border-bottom:#CCC 1px solid;color:#FFF;font-size:11pt;}
+    ul.typeahead.dropdown-menu li:last-child a { border-bottom:0px !important; }
+    .bgcolor {max-width: 550px;min-width: 290px;max-height:340px;padding: 100px 10px 130px;border-radius:4px;text-align:center;margin:10px;}
+    .demo-label {font-size:1.5em;color: #686868;font-weight: 500;color:#FFF;}
+    .dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover {
+        text-decoration: none;
+        background-color: #1f3f41;
+        outline: 0;
+        font-size: 8pt;
+    }
+</style>    
 <?php
 $aksi = "modules/transaksi/aksi_transaksi.php";
 $act = $_GET['act'];
@@ -37,15 +37,15 @@ error_reporting(E_ALL);
 
 function autocode($koneksi)
 {
-	$query=mysqli_query($koneksi, "SELECT SUBSTR(nota,11,4) as nota,tanggal FROM table_rekap ORDER BY ABS(nota) DESC");
-	if (!$query) {
-		printf("Error: %s\n", mysqli_error($koneksi));
-		exit();
-	}
-	$r=mysqli_fetch_array($query);
+    $query=mysqli_query($koneksi, "SELECT SUBSTR(nota,11,4) as nota,tanggal FROM table_rekap ORDER BY ABS(nota) DESC");
+    if (!$query) {
+        printf("Error: %s\n", mysqli_error($koneksi));
+        exit();
+    }
+    $r=mysqli_fetch_array($query);
 
-	if($r>0)
-	{
+    if($r>0)
+    {
         if($r['tanggal']!==date('Y-m-d'))
         {
             $kode = 1;
@@ -87,10 +87,10 @@ function format_kode($value) {
 
 switch($act)
 {
-	default:
-	?>
-	<div class="animated fadeIn">
-		<?php 
+    default:
+    ?>
+    <div class="animated fadeIn">
+        <?php 
         $data_keranjang=mysqli_query($koneksi, "SELECT * FROM table_rekap WHERE transaksi_selesai='N' ORDER BY id_daterek DESC");
 
         if (!$data_keranjang) {
@@ -107,57 +107,57 @@ switch($act)
                             <!-- <a type="button"  href="?module=user&act=add" class="btn btn-outline-info pull-right">Input Data<i class="fa ti-file"></i></a> -->
                         </div>
                         <div class="card-body card-block">
-                        	<div class="col-md-12">
-                        		<form method="post" id="form" action="#" enctype="multipart/form-data">
-                        		<div class="col-md-12">
-                        			<div class="row form-group">
-                        				<div class="col-12 col-md-12">
-                        					<input type="text" id="nota" style="text-align: right" name="nota" placeholder="No Nota" class="form-control" value="<?= isset($r) && !empty($r['nota'])?$r['nota']:autocode($koneksi)?>" readonly>
-                        					<small class="form-text text-muted">Nota penjualan obat</small>
-                        				</div>
-                        			</div> 
-                        			<div class="row form-group">
-                        				<div class="col-12 col-md-12">
-                        					<input type="text" id="tanggal" style="text-align: right" name="tanggal" placeholder="Tgl Transasksi" class="form-control datepicker" value="<?=isset($r) && !empty($r['tanggal'])?date('d-m-Y',strtotime($r['tanggal'])):date('d-m-Y')?>">
-                        					<small class="form-text text-muted">Tanggal transaksi penjualan</small>
-                        				</div>
-                        			</div> 
-                        			<div class="row form-group">
-                        				<div class="col-12 col-md-12">
-                        					<input type="text" name="obat" id="obat" class="typeahead"/>
-                        					<input type="hidden" name="id_obat" id="id_obat" class="form-control"/>
+                            <div class="col-md-12">
+                                <form method="post" id="form" action="#" enctype="multipart/form-data">
+                                <div class="col-md-12">
+                                    <div class="row form-group">
+                                        <div class="col-12 col-md-12">
+                                            <input type="text" id="nota" style="text-align: right" name="nota" placeholder="No Nota" class="form-control" value="<?= isset($r) && !empty($r['nota'])?$r['nota']:autocode($koneksi)?>" readonly>
+                                            <small class="form-text text-muted">Nota penjualan obat</small>
+                                        </div>
+                                    </div> 
+                                    <div class="row form-group">
+                                        <div class="col-12 col-md-12">
+                                            <input type="text" id="tanggal" style="text-align: right" name="tanggal" placeholder="Tgl Transasksi" class="form-control datepicker" value="<?=isset($r) && !empty($r['tanggal'])?date('d-m-Y',strtotime($r['tanggal'])):date('d-m-Y')?>">
+                                            <small class="form-text text-muted">Tanggal transaksi penjualan</small>
+                                        </div>
+                                    </div> 
+                                    <div class="row form-group">
+                                        <div class="col-12 col-md-12">
+                                            <input type="text" name="obat" id="obat" class="typeahead"/>
+                                            <input type="hidden" name="id_obat" id="id_obat" class="form-control"/>
                                             <input type="hidden" name="nama_barang" id="nama_barang" class="form-control"/>
-                        					<small class="form-text text-muted">Autocomplete Obat</small>
-                        				</div>
-                        			</div>  
-                        			<div class="row form-group">
-                        				<div class="col-12 col-md-12">
-                        					<input type="text" name="harga" style="text-align: right" id="harga" class="form-control" value="0" readonly/>
-                        					<small class="form-text text-muted">Harga Satuan</small>
-                        				</div>
-                        			</div>  
-                        			<div class="row form-group">
-                        				<div class="col-6 col-md-6">
-                        					<input type="number" name="stok" style="text-align: right" id="stok" class="form-control count" value="0" readonly/>
-                        					<input type="hidden" name="stok1" style="text-align: right" id="stok1" class="form-control count" value="0"/>
-                        					<small class="form-text text-muted">Stok Sisa</small>
-                        				</div>
-                        				<div class="col-6 col-md-6">
-                        					<input type="number" min="0" name="qty" style="text-align: right" id="qty" value="0" class="form-control count"/>
-                        					<small class="form-text text-muted">Qty</small>
-                        				</div>
-                        			</div>  
-                        			<div class="row form-group">
+                                            <small class="form-text text-muted">Autocomplete Obat</small>
+                                        </div>
+                                    </div>  
+                                    <div class="row form-group">
+                                        <div class="col-12 col-md-12">
+                                            <input type="text" name="harga" style="text-align: right" id="harga" class="form-control" value="0" readonly/>
+                                            <small class="form-text text-muted">Harga Satuan</small>
+                                        </div>
+                                    </div>  
+                                    <div class="row form-group">
+                                        <div class="col-6 col-md-6">
+                                            <input type="number" name="stok" style="text-align: right" id="stok" class="form-control count" value="0" readonly/>
+                                            <input type="hidden" name="stok1" style="text-align: right" id="stok1" class="form-control count" value="0"/>
+                                            <small class="form-text text-muted">Stok Sisa</small>
+                                        </div>
+                                        <div class="col-6 col-md-6">
+                                            <input type="number" min="0" name="qty" style="text-align: right" id="qty" value="0" class="form-control count"/>
+                                            <small class="form-text text-muted">Qty</small>
+                                        </div>
+                                    </div>  
+                                    <div class="row form-group">
                                         <div class="col-5 col-md-5">
                                             <input type="number" min="0" name="diskon" style="text-align: right" id="diskon" value="0" class="form-control count"/>
                                             <small class="form-text text-muted">Diskon (%)</small>
                                         </div>
-                        				<div class="col-7 col-md-7">
-                        					<input type="text" name="subtotal" style="text-align: right" id="subtotal" class="form-control" value="0" readonly/>
-                        					<input type="hidden" name="subtotal1" style="text-align: right" id="subtotal1" class="form-control" value="0"/>
-                        					<small class="form-text text-muted">Total Harga</small>
-                        				</div>
-                        			</div>
+                                        <div class="col-7 col-md-7">
+                                            <input type="text" name="subtotal" style="text-align: right" id="subtotal" class="form-control" value="0" readonly/>
+                                            <input type="hidden" name="subtotal1" style="text-align: right" id="subtotal1" class="form-control" value="0"/>
+                                            <small class="form-text text-muted">Total Harga</small>
+                                        </div>
+                                    </div>
                                     <div class="row form-group">
                                         <div class="col-12 col-md-12">
                                             <input type="text" name="total" style="text-align: right" id="total" class="form-control" value="0" readonly/>
@@ -165,12 +165,12 @@ switch($act)
                                             <small class="form-text text-muted">Subtotal</small>
                                         </div>
                                     </div>
-                        			<div class="text-right">
-                        				<a href="#" class="btn btn-primary btn-sm" id="add_cart">Add to Cart</a>
-                        			</div>  
-                        		</div>
-                        	</form>
-                        	
+                                    <div class="text-right">
+                                        <a href="#" class="btn btn-primary btn-sm" id="add_cart">Add to Cart</a>
+                                    </div>  
+                                </div>
+                            </form>
+                            
                         </div>
                     </div>
 
@@ -185,8 +185,8 @@ switch($act)
                             <!-- <a type="button"  href="?module=user&act=add" class="btn btn-outline-info pull-right">Input Data<i class="fa ti-file"></i></a> -->
                         </div>
                         <div class="card-body card-block">
-                        	<div class="col-md-12">
-                        		<form method="post" id="form1" action="<?= $aksi ?>?module=transaksi&act=bayar" enctype="multipart/form-data">
+                            <div class="col-md-12">
+                                <form method="post" id="form1" action="<?= $aksi ?>?module=transaksi&act=bayar" enctype="multipart/form-data">
                                   <div class="col-md-12">
                                     <div class="form-group row">
                                      <div class="table-responsive">
@@ -297,13 +297,13 @@ switch($act)
                                 </div>
                                 <br/>
                                 <hr/>
-                        			<div class="text-right">
-                        				<a href="#" class="btn btn-danger btn-sm" id="cancel">Batal Transaksi</a>
+                                    <div class="text-right">
+                                        <a href="#" class="btn btn-danger btn-sm" id="cancel">Batal Transaksi</a>
                                         <button type="submit" id="simpan" class="btn btn-success btn-sm">Bayar</button>
-                        			</div>  
-                        		</div>
-                        	</form>
-                        	
+                                    </div>  
+                                </div>
+                            </form>
+                            
                         </div>
                     </div>
 
@@ -349,7 +349,7 @@ switch($act)
                                             <td>Rp.&nbsp<?= number_format($r['kembali'],0,',','.') ?></td>
                                             <td>
                                                 <a href="?module=rekap&act=detail_transaksi&id=<?php echo $r['id_daterek']; ?>" type="button" class="btn btn-outline-warning"><i class="fa fa-eye"></i></a>
-                                                <a href="<?= $aksi ?>?module=transaksi&act=delete&id=<?php echo $r['id_daterek']; ?>" type="button" class="btn btn-outline-danger hapus"><i class="fa fa-trash"></i></a>
+                                                <a href="modules/rekap/aksi_rekap.php?module=rekap&act=hapus_transaksi&id=<?php echo $r['id_daterek']; ?>" type="button" class="btn btn-outline-danger hapus"><i class="fa fa-trash"></i></a>
                                             </td>
                                         </tr>
                                         <?php
@@ -380,7 +380,7 @@ switch($act)
         </div><!-- .content -->
         
         <script type="text/javascript">
-        	$(document).ready(function(){
+            $(document).ready(function(){
                 $('.hapus').click(function(){
                     var con=confirm("Apakah anda yakin akan menghapus transaksi ini?");
                     if(con==true)
