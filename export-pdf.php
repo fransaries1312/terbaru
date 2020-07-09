@@ -26,7 +26,7 @@ $pdf->SetFont('Arial','B',13);
 if($mode=='harian')
 {
   $tanggal=$_GET['tanggal'];
-   $tampil = mysqli_query($koneksi, "SELECT table_obat.nama_obat, data_rekap.tanggal, data_rekap.jumlah  FROM data_rekap JOIN table_obat ON data_rekap.id_obat=table_obat.id_obat WHERE data_rekap.tanggal='".$tanggal."'");
+   $tampil = mysqli_query($koneksi, "SELECT detail_rekap.id_rek,detail_rekap.jumlah,detail_rekap.subtotal,table_obat.nama_obat,table_obat.bentuk_obat,table_rekap.tanggal,table_rekap.cara_bayar,table_rekap.nota FROM table_rekap JOIN detail_rekap ON detail_rekap.id_daterek=table_rekap.id_daterek JOIN table_obat ON detail_rekap.id_obat=table_obat.id_obat WHERE table_rekap.tanggal='".$tanggal."'");
     $no = 0;
 
     $pdf->Cell(190,7,'LAPORAN PENJUALAN OBAT TANGGAL '.date('d-m-Y',strtotime($tanggal)),0,1,'C');
