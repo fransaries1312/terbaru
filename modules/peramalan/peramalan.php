@@ -7,6 +7,23 @@
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
 
+if (! function_exists('dd'))
+{
+    /**
+     * Print all data before being load.
+     *
+     * @return bool
+     */
+    function dd($data)
+    {
+        $elem='<pre>';
+        $elem.=print_r($data);
+        $elem.=die;
+        $elem.='</pre>';
+        return $elem;
+    }
+} 
+
 $act = $_GET['act'];
 switch ($act) {
     // Tampil Data Obat
@@ -84,14 +101,20 @@ if(isset($_GET['tanggal_awal']) && isset($_GET['tanggal_akhir']))
 $tgl_awal=$tgl_awal1->format('Y-m-d');
 $tgl_akhir=$tgl_akhir1->format('Y-m-d');
 
-        $result = mysqli_query($koneksi, "SELECT SUM(jumlah) as jumlah,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan FROM data_rekap WHERE id_obat = $_GET[id_obat] and tanggal >= '$tgl_awal' and 
-            tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal), YEAR(tanggal) ORDER BY tanggal  ASC");
+        // $result = mysqli_query($koneksi, "SELECT SUM(jumlah) as jumlah,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan FROM data_rekap WHERE id_obat = $_GET[id_obat] and tanggal >= '$tgl_awal' and 
+        //     tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal), YEAR(tanggal) ORDER BY tanggal  ASC");
 
+        $result = mysqli_query($koneksi, "SELECT SUM(detail_rekap.jumlah) as jumlah,CONCAT(DATE_FORMAT(table_rekap.tanggal, '%Y'),'/',DATE_FORMAT(table_rekap.tanggal, '%m')) AS tahun_bulan FROM detail_rekap JOIN table_rekap ON table_rekap.id_daterek=detail_rekap.id_daterek WHERE detail_rekap.id_obat = $_GET[id_obat] and table_rekap.tanggal >= '$tgl_awal' and 
+            table_rekap.tanggal <='$tgl_akhir' GROUP BY MONTH(table_rekap.tanggal), YEAR(table_rekap.tanggal) ORDER BY table_rekap.tanggal  ASC");
+
+        if (!$result) {
+            printf("Error: %s\n", mysqli_error($koneksi));
+            exit();
+        }
 
 
         while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
             $d[$t_ses]=$row;
-
             // $d_ses[$t_ses] = $row['jumlah'];      
             //            if ($t_ses <= 4) {
             //     $sd += $row['jumlah'];             
