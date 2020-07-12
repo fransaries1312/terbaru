@@ -76,6 +76,18 @@
                     <hr>
 
                     <?php
+
+                    if (! function_exists('dd'))
+                    {
+                        function dd($data)
+                        {
+                            $elem='<pre>';
+                            $elem.=print_r($data);
+                            $elem.=die;
+                            $elem.='</pre>';
+                            return $elem;
+                        }
+                    } 
                     
                        function week_between_two_dates($start_date, $end_date) {
                         $p = new DatePeriod(
@@ -125,7 +137,12 @@
                         $tgl_awal=date('Y-m-d',strtotime($_GET['tanggal_awal']));
                         $tgl_akhir=date('Y-m-d',strtotime($_GET['tanggal_akhir']));
 
-                                $result = mysqli_query($koneksi, "SELECT sum(jumlah) as jumlah,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan FROM data_rekap WHERE id_obat = $_GET[id_obat] AND tanggal >= '$tgl_awal' and tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal),id_obat,YEAR(tanggal) ORDER BY tanggal ASC");
+                                $result = mysqli_query($koneksi, "SELECT sum(detail_rekap.jumlah) as jumlah,CONCAT(DATE_FORMAT(table_rekap.tanggal, '%Y'),'/',DATE_FORMAT(table_rekap.tanggal, '%m')) AS tahun_bulan FROM detail_rekap JOIN table_rekap ON table_rekap.id_daterek=detail_rekap.id_daterek WHERE detail_rekap.id_obat = $_GET[id_obat] AND table_rekap.tanggal >= '$tgl_awal' and table_rekap.tanggal <='$tgl_akhir' GROUP BY MONTH(table_rekap.tanggal),id_obat,YEAR(table_rekap.tanggal) ORDER BY table_rekap.tanggal ASC");
+
+                                if (!$result) {
+                                    printf("Error: %s\n", mysqli_error($koneksi));
+                                    exit();
+                                }
                                 
                                 $i=0;
                                 while ($r = mysqli_fetch_array($result)) {
@@ -146,7 +163,14 @@
                                 $jumlah=getTotal($label_x, $a);
                                 
 
-                                $result1 = mysqli_query($koneksi, "SELECT sum(jumlah) as jumlah,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan  FROM data_rekap WHERE id_obat = $_GET[id_obat1] AND tanggal >= '$tgl_awal' and tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal),id_obat,YEAR(tanggal) ORDER BY tanggal ASC");
+                                // $result1 = mysqli_query($koneksi, "SELECT sum(jumlah) as jumlah,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan  FROM data_rekap WHERE id_obat = $_GET[id_obat1] AND tanggal >= '$tgl_awal' and tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal),id_obat,YEAR(tanggal) ORDER BY tanggal ASC");
+
+                                $result1 = mysqli_query($koneksi, "SELECT sum(detail_rekap.jumlah) as jumlah,CONCAT(DATE_FORMAT(table_rekap.tanggal, '%Y'),'/',DATE_FORMAT(table_rekap.tanggal, '%m')) AS tahun_bulan FROM detail_rekap JOIN table_rekap ON table_rekap.id_daterek=detail_rekap.id_daterek WHERE detail_rekap.id_obat = $_GET[id_obat1] AND table_rekap.tanggal >= '$tgl_awal' and table_rekap.tanggal <='$tgl_akhir' GROUP BY MONTH(table_rekap.tanggal),id_obat,YEAR(table_rekap.tanggal) ORDER BY table_rekap.tanggal ASC");
+
+                                if (!$result1) {
+                                    printf("Error: %s\n", mysqli_error($koneksi));
+                                    exit();
+                                }
                                                 
                                 while ($r1 = mysqli_fetch_array($result1)) {
                                     array_push($x1,$r1['tahun_bulan']);
@@ -162,7 +186,14 @@
                                 }
                                 $jumlah1=getTotal($label_x, $a1);
                                 
-                                $result2 = mysqli_query($koneksi, "SELECT sum(jumlah) as jumlah,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan  FROM data_rekap WHERE id_obat = $_GET[id_obat2] AND tanggal >= '$tgl_awal' and tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal),id_obat,YEAR(tanggal) ORDER BY tanggal ASC");
+                                // $result2 = mysqli_query($koneksi, "SELECT sum(jumlah) as jumlah,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan  FROM data_rekap WHERE id_obat = $_GET[id_obat2] AND tanggal >= '$tgl_awal' and tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal),id_obat,YEAR(tanggal) ORDER BY tanggal ASC");
+
+                                $result2 = mysqli_query($koneksi, "SELECT sum(detail_rekap.jumlah) as jumlah,CONCAT(DATE_FORMAT(table_rekap.tanggal, '%Y'),'/',DATE_FORMAT(table_rekap.tanggal, '%m')) AS tahun_bulan FROM detail_rekap JOIN table_rekap ON table_rekap.id_daterek=detail_rekap.id_daterek WHERE detail_rekap.id_obat = $_GET[id_obat2] AND table_rekap.tanggal >= '$tgl_awal' and table_rekap.tanggal <='$tgl_akhir' GROUP BY MONTH(table_rekap.tanggal),id_obat,YEAR(table_rekap.tanggal) ORDER BY table_rekap.tanggal ASC");
+
+                                if (!$result2) {
+                                    printf("Error: %s\n", mysqli_error($koneksi));
+                                    exit();
+                                }
                                                 
                                 while ($r2 = mysqli_fetch_array($result2)) {
                                     array_push($x2,$r2['tahun_bulan']);

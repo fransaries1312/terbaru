@@ -709,7 +709,16 @@ toastr.warning('Parameter tanggal harus lebih dari 4 bulan','Info');
         $tgl_akhir=date('Y-m-d',strtotime($_GET['tanggal_akhir']));
 
         
-        $result = mysqli_query($koneksi, "SELECT data_rekap.*,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan FROM data_rekap WHERE id_obat = $_GET[id_obat] and tanggal >= '$tgl_awal' and tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal),YEAR(tanggal) ORDER BY tanggal ASC");
+        // $result = mysqli_query($koneksi, "SELECT data_rekap.*,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan FROM data_rekap WHERE id_obat = $_GET[id_obat] and tanggal >= '$tgl_awal' and tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal),YEAR(tanggal) ORDER BY tanggal ASC");
+
+        $result = mysqli_query($koneksi, "SELECT detail_rekap.*,CONCAT(DATE_FORMAT(table_rekap.tanggal, '%Y'),'/',DATE_FORMAT(table_rekap.tanggal, '%m')) AS tahun_bulan FROM detail_rekap JOIN table_rekap ON table_rekap.id_daterek=detail_rekap.id_daterek WHERE detail_rekap.id_obat = $_GET[id_obat] and table_rekap.tanggal >= '$tgl_awal' and 
+            table_rekap.tanggal <='$tgl_akhir' GROUP BY MONTH(table_rekap.tanggal), YEAR(table_rekap.tanggal) ORDER BY table_rekap.tanggal  ASC");
+
+        if (!$result) {
+            printf("Error: %s\n", mysqli_error($koneksi));
+            exit();
+        }
+
 
         while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
             $d_ses[$t_ses] = $row;
@@ -950,7 +959,16 @@ function getTotal($periode, $data) {
         $tgl_akhir=date('Y-m-d',strtotime($_GET['tanggal_akhir']));
 
         
-        $result = mysqli_query($koneksi, "SELECT data_rekap.*,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan FROM data_rekap WHERE id_obat = $_GET[id_obat] and tanggal >= '$tgl_awal' and tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal),YEAR(tanggal) ORDER BY tanggal ASC");
+        // $result = mysqli_query($koneksi, "SELECT data_rekap.*,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan FROM data_rekap WHERE id_obat = $_GET[id_obat] and tanggal >= '$tgl_awal' and tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal),YEAR(tanggal) ORDER BY tanggal ASC");
+
+        $result = mysqli_query($koneksi, "SELECT detail_rekap.*,CONCAT(DATE_FORMAT(table_rekap.tanggal, '%Y'),'/',DATE_FORMAT(table_rekap.tanggal, '%m')) AS tahun_bulan FROM detail_rekap JOIN table_rekap ON table_rekap.id_daterek=detail_rekap.id_daterek WHERE detail_rekap.id_obat = $_GET[id_obat] and table_rekap.tanggal >= '$tgl_awal' and 
+            table_rekap.tanggal <='$tgl_akhir' GROUP BY MONTH(table_rekap.tanggal), YEAR(table_rekap.tanggal) ORDER BY table_rekap.tanggal  ASC");
+
+        if (!$result) {
+            printf("Error: %s\n", mysqli_error($koneksi));
+            exit();
+        }
+
 
         while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
             $d_wma[$t_wma] = $row;
@@ -1153,7 +1171,15 @@ function getTotal($periode, $data) {
         $tgl_akhir=date('Y-m-d',strtotime($_GET['tanggal_akhir']));
 
         
-        $result = mysqli_query($koneksi, "SELECT data_rekap.*,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan FROM data_rekap WHERE id_obat = $_GET[id_obat] and tanggal >= '$tgl_awal' and tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal),YEAR(tanggal) ORDER BY tanggal ASC");
+        // $result = mysqli_query($koneksi, "SELECT data_rekap.*,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan FROM data_rekap WHERE id_obat = $_GET[id_obat] and tanggal >= '$tgl_awal' and tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal),YEAR(tanggal) ORDER BY tanggal ASC");
+
+         $result = mysqli_query($koneksi, "SELECT detail_rekap.*,CONCAT(DATE_FORMAT(table_rekap.tanggal, '%Y'),'/',DATE_FORMAT(table_rekap.tanggal, '%m')) AS tahun_bulan FROM detail_rekap JOIN table_rekap ON table_rekap.id_daterek=detail_rekap.id_daterek WHERE detail_rekap.id_obat = $_GET[id_obat] and table_rekap.tanggal >= '$tgl_awal' and 
+            table_rekap.tanggal <='$tgl_akhir' GROUP BY MONTH(table_rekap.tanggal), YEAR(table_rekap.tanggal) ORDER BY table_rekap.tanggal  ASC");
+
+        if (!$result) {
+            printf("Error: %s\n", mysqli_error($koneksi));
+            exit();
+        }
 
         while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
             $d_tp[$t_tp] = $row;
