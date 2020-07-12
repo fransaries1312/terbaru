@@ -104,7 +104,10 @@ $tgl_akhir=$tgl_akhir1->format('Y-m-d');
         // $result = mysqli_query($koneksi, "SELECT SUM(jumlah) as jumlah,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan FROM data_rekap WHERE id_obat = $_GET[id_obat] and tanggal >= '$tgl_awal' and 
         //     tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal), YEAR(tanggal) ORDER BY tanggal  ASC");
 
-        $result = mysqli_query($koneksi, "SELECT SUM(detail_rekap.jumlah) as jumlah,CONCAT(DATE_FORMAT(table_rekap.tanggal, '%Y'),'/',DATE_FORMAT(table_rekap.tanggal, '%m')) AS tahun_bulan FROM detail_rekap JOIN table_rekap ON table_rekap.id_daterek=detail_rekap.id_daterek WHERE detail_rekap.id_obat = $_GET[id_obat] and table_rekap.tanggal >= '$tgl_awal' and 
+        // $result = mysqli_query($koneksi, "SELECT SUM(detail_rekap.jumlah) as jumlah,CONCAT(DATE_FORMAT(table_rekap.tanggal, '%Y'),'/',DATE_FORMAT(table_rekap.tanggal, '%m')) AS tahun_bulan FROM detail_rekap JOIN table_rekap ON table_rekap.id_daterek=detail_rekap.id_daterek WHERE detail_rekap.id_obat = $_GET[id_obat] and table_rekap.tanggal >= '$tgl_awal' and 
+        //     table_rekap.tanggal <='$tgl_akhir' GROUP BY MONTH(table_rekap.tanggal), YEAR(table_rekap.tanggal) ORDER BY table_rekap.tanggal  ASC");
+
+        $result = mysqli_query($koneksi, "SELECT SUM(detail_rekap.jumlah * table_obat.satuan) as jumlah,CONCAT(DATE_FORMAT(table_rekap.tanggal, '%Y'),'/',DATE_FORMAT(table_rekap.tanggal, '%m')) AS tahun_bulan FROM detail_rekap JOIN table_rekap ON table_rekap.id_daterek=detail_rekap.id_daterek JOIN table_obat ON table_obat.id_obat=detail_rekap.id_obat WHERE table_obat.nama_obat LIKE '%$_GET[id_obat]%' and table_rekap.tanggal >= '$tgl_awal' and 
             table_rekap.tanggal <='$tgl_akhir' GROUP BY MONTH(table_rekap.tanggal), YEAR(table_rekap.tanggal) ORDER BY table_rekap.tanggal  ASC");
 
         if (!$result) {
@@ -401,11 +404,11 @@ toastr.warning('Parameter tanggal harus lebih dari 4 bulan','Info');
                                     <option value="" label="default">---Pilih Obat---</option>
 
                                             <?php
-                                            $tampil = mysqli_query($koneksi, "SELECT * FROM table_obat");
+                                            $tampil = mysqli_query($koneksi, "SELECT nama_obat FROM table_obat GROUP BY nama_obat");
 
                                             while ($r = mysqli_fetch_array($tampil)) {
                                                 ?>
-                                                <option value="<?= $r['id_obat'] ?>" <?php echo $r['id_obat'] == $_GET['id_obat'] ? 'selected' : NULL; ?>><?= $r['nama_obat'] ?></option>
+                                                <option value="<?= $r['nama_obat'] ?>" <?php echo $r['nama_obat'] == $_GET['id_obat'] ? 'selected' : NULL; ?>><?= $r['nama_obat'] ?></option>
                                                 <?php
                                             }
                                             ?>
@@ -709,12 +712,21 @@ toastr.warning('Parameter tanggal harus lebih dari 4 bulan','Info');
         $tgl_akhir=date('Y-m-d',strtotime($_GET['tanggal_akhir']));
 
         
-        $result = mysqli_query($koneksi, "SELECT data_rekap.*,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan FROM data_rekap WHERE id_obat = $_GET[id_obat] and tanggal >= '$tgl_awal' and tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal),YEAR(tanggal) ORDER BY tanggal ASC");
+        // $result = mysqli_query($koneksi, "SELECT data_rekap.*,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan FROM data_rekap WHERE id_obat = $_GET[id_obat] and tanggal >= '$tgl_awal' and tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal),YEAR(tanggal) ORDER BY tanggal ASC");
+
+        $result = mysqli_query($koneksi, "SELECT SUM(detail_rekap.jumlah * table_obat.satuan) as jumlah,CONCAT(DATE_FORMAT(table_rekap.tanggal, '%Y'),'/',DATE_FORMAT(table_rekap.tanggal, '%m')) AS tahun_bulan FROM detail_rekap JOIN table_rekap ON table_rekap.id_daterek=detail_rekap.id_daterek JOIN table_obat ON table_obat.id_obat=detail_rekap.id_obat WHERE table_obat.nama_obat LIKE '%$_GET[id_obat]%' and table_rekap.tanggal >= '$tgl_awal' and 
+            table_rekap.tanggal <='$tgl_akhir' GROUP BY MONTH(table_rekap.tanggal), YEAR(table_rekap.tanggal) ORDER BY table_rekap.tanggal  ASC");
+
+        if (!$result) {
+            printf("Error: %s\n", mysqli_error($koneksi));
+            exit();
+        }
 
         while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
             $d_ses[$t_ses] = $row;
             $t_ses++;
         }
+        // dd($d_ses);
 
 
         $d_ses=getTotal($tanggal,$d_ses);
@@ -950,7 +962,15 @@ function getTotal($periode, $data) {
         $tgl_akhir=date('Y-m-d',strtotime($_GET['tanggal_akhir']));
 
         
-        $result = mysqli_query($koneksi, "SELECT data_rekap.*,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan FROM data_rekap WHERE id_obat = $_GET[id_obat] and tanggal >= '$tgl_awal' and tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal),YEAR(tanggal) ORDER BY tanggal ASC");
+        // $result = mysqli_query($koneksi, "SELECT data_rekap.*,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan FROM data_rekap WHERE id_obat = $_GET[id_obat] and tanggal >= '$tgl_awal' and tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal),YEAR(tanggal) ORDER BY tanggal ASC");
+
+        $result = mysqli_query($koneksi, "SELECT SUM(detail_rekap.jumlah * table_obat.satuan) as jumlah,CONCAT(DATE_FORMAT(table_rekap.tanggal, '%Y'),'/',DATE_FORMAT(table_rekap.tanggal, '%m')) AS tahun_bulan FROM detail_rekap JOIN table_rekap ON table_rekap.id_daterek=detail_rekap.id_daterek JOIN table_obat ON table_obat.id_obat=detail_rekap.id_obat WHERE table_obat.nama_obat LIKE '%$_GET[id_obat]%' and table_rekap.tanggal >= '$tgl_awal' and 
+            table_rekap.tanggal <='$tgl_akhir' GROUP BY MONTH(table_rekap.tanggal), YEAR(table_rekap.tanggal) ORDER BY table_rekap.tanggal  ASC");
+
+        if (!$result) {
+            printf("Error: %s\n", mysqli_error($koneksi));
+            exit();
+        }
 
         while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
             $d_wma[$t_wma] = $row;
@@ -1153,7 +1173,15 @@ function getTotal($periode, $data) {
         $tgl_akhir=date('Y-m-d',strtotime($_GET['tanggal_akhir']));
 
         
-        $result = mysqli_query($koneksi, "SELECT data_rekap.*,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan FROM data_rekap WHERE id_obat = $_GET[id_obat] and tanggal >= '$tgl_awal' and tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal),YEAR(tanggal) ORDER BY tanggal ASC");
+        // $result = mysqli_query($koneksi, "SELECT data_rekap.*,CONCAT(DATE_FORMAT(tanggal, '%Y'),'/',DATE_FORMAT(tanggal, '%m')) AS tahun_bulan FROM data_rekap WHERE id_obat = $_GET[id_obat] and tanggal >= '$tgl_awal' and tanggal <='$tgl_akhir' GROUP BY MONTH(tanggal),YEAR(tanggal) ORDER BY tanggal ASC");
+
+        $result = mysqli_query($koneksi, "SELECT SUM(detail_rekap.jumlah * table_obat.satuan) as jumlah,CONCAT(DATE_FORMAT(table_rekap.tanggal, '%Y'),'/',DATE_FORMAT(table_rekap.tanggal, '%m')) AS tahun_bulan FROM detail_rekap JOIN table_rekap ON table_rekap.id_daterek=detail_rekap.id_daterek JOIN table_obat ON table_obat.id_obat=detail_rekap.id_obat WHERE table_obat.nama_obat LIKE '%$_GET[id_obat]%' and table_rekap.tanggal >= '$tgl_awal' and 
+            table_rekap.tanggal <='$tgl_akhir' GROUP BY MONTH(table_rekap.tanggal), YEAR(table_rekap.tanggal) ORDER BY table_rekap.tanggal  ASC");
+
+        if (!$result) {
+            printf("Error: %s\n", mysqli_error($koneksi));
+            exit();
+        }
 
         while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
             $d_tp[$t_tp] = $row;
