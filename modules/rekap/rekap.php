@@ -13,40 +13,60 @@ switch ($act) {
 
 
         <div class="animated fadeIn">
+            
             <div class="row">
-
-                <div class="col-md-12">
+               <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
                             <strong class="card-title">Tabel Rekap Penjualan</strong>
-                            <a type="button"  href="?module=rekap&act=add" class="btn btn-outline-info pull-right">Input Data<i class="fa ti-file"></i></a>
+                            
                         </div>
+                        
+                        <div class="row form-group" style="margin-left: 2em;margin-top: 2em">
+                            <div class="col col-md-1"><label for="select" class=" form-control-label">Tanggal</label></div>
+                            <div class="col-md-3">
+                                <input type="text" name="tanggal_awal" value="<?php echo isset($_GET['tanggal_awal'])?$_GET['tanggal_awal']:date('d-m-Y')?>" class="form-control datepicker">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="tanggal_akhir" value="<?php echo isset($_GET['tanggal_akhir'])?$_GET['tanggal_akhir']:date('d-m-Y')?>" class="form-control datepicker">
+                            </div>
+                           <!--  <input type="hidden" name="module" value="grafik"> -->
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="fa fa-dot-circle-o col-md">Proses </i> 
+                                </button>
+                            </div>
+
+                        </div>                        
+                    
+
+                <hr>
                         <div class="card-body">
                             <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                 <thead>
                                     <tr >
                                         <th>No</th>
+                                        <th>Nota</th>
                                         <th>Tanggal</th>
                                         <th>Nama Obat</th>
                                         <th>Jumlah</th>
-                                        <th>Harga</th>
                                         <th>Total</th>
                                         <th>Aksi</th>
                                         </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $tampil = mysqli_query($koneksi, "SELECT table_obat.nama_obat, data_rekap.tanggal, data_rekap.jumlah, data_rekap.id_rek,table_obat.harga_obat, (table_obat.harga_obat * data_rekap.jumlah) as sum_total FROM data_rekap JOIN table_obat ON data_rekap.id_obat=table_obat.id_obat");
+                                    $tampil = mysqli_query($koneksi, "SELECT table_rekap.nota,table_obat.nama_obat,table_obat.bentuk_obat, table_rekap.tanggal, detail_rekap.jumlah, detail_rekap.subtotal FROM table_rekap JOIN detail_rekap ON detail_rekap.id_daterek=table_rekap.id_daterek JOIN table_obat ON detail_rekap.id_obat=table_obat.id_obat ORDER BY table_rekap.nota ASC");
                                     $no = 1;
                                     while ($r = mysqli_fetch_array($tampil)) {
                                         ?>
                                         <tr>
                                             <td><?= $no++ ?></td>
+                                            <td><?= $r['nota'] ?></td>
                                             <td><?= date('d-m-Y',strtotime($r['tanggal'])) ?></td>
                                             <td><?= $r['nama_obat'] ?></td>
                                             <td><?= $r['jumlah'] ?></td>
-                                            <td><?= number_format($r['harga_obat'],0,',','.') ?></td>
-                                            <td><?= number_format($r['sum_total'],0,',','.') ?></td>
+                                            <td><?= number_format($r['subtotal'],0,',','.') ?></td>
                                             <td>
                                                 <a href="?module=rekap&act=edit&id=<?php echo $r[id_rek]; ?>" type="button" class="btn btn-outline-warning"><i class="fa fa-pencil"></i></a>
                                                 <a href="<?= $aksi ?>?module=rekap&act=delete&id=<?php echo $r[id_rek]; ?>" type="button" class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>

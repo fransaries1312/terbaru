@@ -33,7 +33,7 @@ if ($_GET['module'] == 'manufaktur') {
     
 // Bagian Data Rekap
 if ($_GET['module'] == 'rekap') {
-    include"modules/rekap/rekap1.php";
+    include"modules/rekap/rekap.php";
 } else
     
 // Bagian Laporan
