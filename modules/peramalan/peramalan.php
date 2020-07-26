@@ -544,7 +544,7 @@ toastr.warning('Parameter tanggal harus lebih dari 4 bulan','Info');
              jQuery(document).ready(function() {
         jQuery(".standardSelect").chosen({
             disable_search_threshold: 10,
-            no_results_text: "Wasuu ra ketemu cuk!",
+            no_results_text: "data tidak ditemukan!",
             width: "100%"
         });
 
@@ -844,17 +844,15 @@ toastr.warning('Parameter tanggal harus lebih dari 4 bulan','Info');
             if ($key == 0) {
                 $mad1[$key] = $almad_ses[$key];
             } else {
-                $mad1[$key] = $almad_ses[$key] / $key;
+                $mad1[$key] = $almad_ses[$key] / ($key+1);
             }
         }
 
         //tracking
         foreach ($d_ses as $key => $value) {
-            if ($key == 0) {
-                $tracking_ses[$key] = $rsfe_ses[$key];
-            } else {
+
                 $tracking_ses[$key] = $rsfe_ses[$key] / $mad1[$key];
-            }
+            
         }
 
 
@@ -1076,12 +1074,10 @@ function getTotal($periode, $data) {
 
 //tracking
         foreach ($d_wma as $key => $value) {
-            if ($key == 0) {
-                $tracking_wma[$key] = $rsfe_wma[$key];
-            } else {
+
                 $tracking_wma[$key] = $rsfe_wma[$key] / $mad1_wma[$key];
             }
-        }
+        
 
         // dd($m_wma);
 
@@ -1150,7 +1146,7 @@ function getTotal($periode, $data) {
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
+                                <td><a href="?id_obat=<?= $_GET[id_obat] ?>&module=peramalan&act=tracking_wma&tanggal_awal=<?php echo $_GET['tanggal_awal']?>&tanggal_akhir=<?php echo $_GET['tanggal_akhir']?>" type="button" class="btn btn-outline-warning"> tracking </a></td>
                             </tr>
                         </tfoot>
                         
@@ -1326,18 +1322,16 @@ function getTotal($periode, $data) {
             if ($key == 0) {
                 $mad1_tp[$key] = $almad_tp[$key];
             } else {
-                $mad1_tp[$key] = $almad_tp[$key] / $key;
+                $mad1_tp[$key] = $almad_tp[$key] / ($key+1);
             }
         }
 
         //tracking
         foreach ($d_tp as $key => $value) {
-            if ($key == 0) {
-                $tracking_tp[$key] = $rsfe_tp[$key];
-            } else {
+
                 $tracking_tp[$key] = $rsfe_tp[$key] / $mad1_tp[$key];
             }
-        }
+        
 
         echo "</pre>";
         ?>
@@ -1401,7 +1395,7 @@ function getTotal($periode, $data) {
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
+                                <td><a href="?id_obat=<?= $_GET[id_obat] ?>&module=peramalan&act=tracking_tp&tanggal_awal=<?php echo $_GET['tanggal_awal']?>&tanggal_akhir=<?php echo $_GET['tanggal_akhir']?>" type="button" class="btn btn-outline-warning"> tracking </a></td>
                             </tr>
                         </tfoot>
                     </table>
@@ -1488,7 +1482,7 @@ case "tracking_ses":
 
 
         $n_ses = count($d_ses);
-       $a_ses=[0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.10,0.11,0.12,0.13,0.14,0.15,0.16,0.17,0.18,0.19,0.20,0.21,0.22,0.23,0.24,0.25,0.26,0.27,0.28,0.29,0.30,0.31,0.32,0.33,0.34,0.35,0.36,0.37,0.38,0.39,0.40,0.41,0.42,0.43,0.44,0.45,0.46,0.47,0.48,0.49,0.50,0.51,0.52,0.53,0.54,0.55,0.56,0.57,0.58,0.59,0.60,0.61,0.62,0.63,0.64,0.65,0.66,0.67,0.68,0.96,0.70,0.71,0.72,0.73,0.74,0.75,0.76,0.77,0.78,0.79,0.80,0.81,0.82,0.83,0.84,0.85,0.86,0.87,0.88,0.89,0.90,0.91,0.92,0.93,0.94,0.95,0.96,0.97,0.98,0.99,];
+       $a_ses=[0.10,0.11,0.12,0.13,0.14,0.15,0.16,0.17,0.18,0.19,0.20,0.21,0.22,0.23,0.24,0.25,0.26,0.27,0.28,0.29,0.30,0.31,0.32,0.33,0.34,0.35,0.36,0.37,0.38,0.39,0.40,0.41,0.42,0.43,0.44,0.45,0.46,0.47,0.48,0.49,0.50,0.51,0.52,0.53,0.54,0.55,0.56,0.57,0.58,0.59,0.60,0.61,0.62,0.63,0.64,0.65,0.66,0.67,0.68,0.96,0.70,0.71,0.72,0.73,0.74,0.75,0.76,0.77,0.78,0.79,0.80,0.81,0.82,0.83,0.84,0.85,0.86,0.87,0.88,0.89,0.90,0.91,0.92,0.93,0.94,0.95,0.96,0.97,0.98,0.99,];
         // $a_ses=[0.1];
 
   
@@ -1576,9 +1570,9 @@ case "tracking_ses":
 
         foreach ($d_ses as $key => $value) {
             if ($key == 0) {
-                $almad_ses[$key] = $m_ses[$key];
+                $almad_ses[$key] = abs($e_ses[$key]);
             } else {
-                $almad_ses[$key] = $almad_ses[$key - 1] + $m_ses[$key];
+                $almad_ses[$key] = $almad_ses[$key - 1] + abs($e_ses[$key]);
             }
         }
 //AlMad        
@@ -1587,7 +1581,7 @@ case "tracking_ses":
             if ($key == 0) {
                 $mad1[$key] = $almad_ses[$key];
             } else {
-                $mad1[$key] = $almad_ses[$key] / $key;
+                $mad1[$key] = $almad_ses[$key] / ($key+1);
             }
         }
 
@@ -1638,6 +1632,7 @@ case "tracking_ses":
                                 <?php
                             }
                             ?>
+                        </tbody>
                         <tfoot>
                             <tr>
                                 <td></td>
@@ -1649,7 +1644,6 @@ case "tracking_ses":
                                 <td></td>
                             </tr>
                         </tfoot>
-                        </tbody>
                     </table>
                 </div>
         <?php
@@ -1698,29 +1692,29 @@ case "tracking_ses":
                                 label: "Tracking Signal",
                                 data: <?= json_encode($tracking_ses) ?>,
                                 backgroundColor: 'transparent',
-                                borderColor: 'rgba(220,53,69,0.75)',
+                                borderColor: 'rgba(253, 215, 3,0.75)',
                                 borderWidth: 3,
                                 pointStyle: 'circle',
                                 pointRadius: 5,
                                 pointBorderColor: 'transparent',
-                                pointBackgroundColor: 'rgba(220,53,69,0.75)',
+                                pointBackgroundColor: 'rgba(253, 215, 3,0.75)',
                             },
                             {
                                 label: "Peramalan WMA",
                                 data: <?= json_encode($new_ses) ?>,
                                 backgroundColor: 'transparent',
-                                borderColor: 'rgba(255, 99, 71, 0.5)',
+                                borderColor: 'rgba(50,205,50, 0.5)',
                                 borderWidth: 3,
                                 pointStyle: 'circle',
                                 pointRadius: 5,
                                 pointBorderColor: 'transparent',
-                                pointBackgroundColor: 'rgba(220,53,69,0.75)',
+                                pointBackgroundColor: 'rgba(50,205,50,0.75)',
                             },
                             {
                                 label: "Aktual",
                                 data: <?= json_encode($d_ses) ?>,
                                 backgroundColor: 'transparent',
-                                borderColor: 'rgba(76, 175, 80, 0.36)',
+                                borderColor: 'rgba(220,53,69, 0.36)',
                                 borderWidth: 3,
                                 pointStyle: 'circle',
                                 pointRadius: 5,
@@ -1933,12 +1927,10 @@ function getTotal($periode, $data) {
 
 //tracking
         foreach ($d_wma as $key => $value) {
-            if ($key == 0) {
-                $tracking_wma[$key] = $rsfe_wma[$key];
-            } else {
+
                 $tracking_wma[$key] = $rsfe_wma[$key] / $mad1_wma[$key];
             }
-        }
+        
 
 
         ?>
@@ -1948,7 +1940,7 @@ function getTotal($periode, $data) {
                     <strong class="card-title">Weighted Moving Average</strong>
                 </div>
                 <div class="card-body">
-                    <table class="table table-striped">
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th scope="col">Periode Data</th>
@@ -1957,7 +1949,7 @@ function getTotal($periode, $data) {
                                 <th scope="col">Nilai Error</th>
                                 <th scope="col">Absolute Error</th>
                                 <th scope="col">Nilai RSFE</th>
-                                <th scope="col">Cum. AE</th>
+                                <th scope="col">Cumulative AE</th>
                                 <th scope="col">MAD TS</th>
                                 <th scope="col">Tracking Signal</th>
                             </tr>
@@ -1988,18 +1980,15 @@ function getTotal($periode, $data) {
                         </tbody>
                         <tfoot>
                             <tr>
+                               <td></td>
+                                <th colspan="2"> tracking signal positif </th>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <th colspan="2"> tracking signal negatif</th>
                                 <td></td>
                                 <td></td>
                             </tr>
                         </tfoot>
-                        
                     </table>
                 </div>
                 <?php
@@ -2035,7 +2024,7 @@ function getTotal($periode, $data) {
              jQuery(document).ready(function() {
         jQuery(".standardSelect").chosen({
             disable_search_threshold: 10,
-            no_results_text: "Wasuu ra ketemu cuk!",
+            no_results_text: "data tidak ditemukan!!",
             width: "100%"
         });
 
@@ -2059,29 +2048,29 @@ function getTotal($periode, $data) {
                                 label: "Tracking Signal",
                                 data: <?= json_encode($tracking) ?>,
                                 backgroundColor: 'transparent',
-                                borderColor: 'rgba(220,53,69,0.75)',
+                                borderColor: 'rgba(253, 215, 3,0.75)',
                                 borderWidth: 3,
                                 pointStyle: 'circle',
                                 pointRadius: 5,
                                 pointBorderColor: 'transparent',
-                                pointBackgroundColor: 'rgba(220,53,69,0.75)',
+                                pointBackgroundColor: 'rgba(253, 215, 3,0.75)',
                             },
                             {
                                 label: "Peramalan WMA",
                                 data: <?= json_encode($f_wma) ?>,
                                 backgroundColor: 'transparent',
-                                borderColor: 'rgba(255, 99, 71, 0.5)',
+                                borderColor: 'rgba(50, 205, 50, 0.5)',
                                 borderWidth: 3,
                                 pointStyle: 'circle',
                                 pointRadius: 5,
                                 pointBorderColor: 'transparent',
-                                pointBackgroundColor: 'rgba(220,53,69,0.75)',
+                                pointBackgroundColor: 'rgba(50, 205, 50,0.75)',
                             },
                             {
                                 label: "Aktual",
                                 data: <?= json_encode($d_wma) ?>,
                                 backgroundColor: 'transparent',
-                                borderColor: 'rgba(76, 175, 80, 0.36)',
+                                borderColor: 'rgba(220,53,69, 0.36)',
                                 borderWidth: 3,
                                 pointStyle: 'circle',
                                 pointRadius: 5,
@@ -2309,7 +2298,7 @@ function getTotal($periode, $data) {
             if ($key == 0) {
                 $mad1_tp[$key] = $almad_tp[$key];
             } else {
-                $mad1_tp[$key] = $almad_tp[$key] / $key;
+                $mad1_tp[$key] = $almad_tp[$key] / ($key+1);
             }
         }
 
@@ -2328,7 +2317,7 @@ function getTotal($periode, $data) {
                     <strong class="card-title">Trend Projection</strong>
                 </div>
                 <div class="card-body">
-                    <table class="table table-striped">
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th scope="col">Periode Data</th>
@@ -2364,12 +2353,10 @@ function getTotal($periode, $data) {
                         <tfoot>
                             <tr>
                                 <td></td>
+                                <th colspan="2"> tracking signal positif </th>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <th colspan="2"> tracking signal negatif</th>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -2397,7 +2384,7 @@ function getTotal($periode, $data) {
              jQuery(document).ready(function() {
         jQuery(".standardSelect").chosen({
             disable_search_threshold: 10,
-            no_results_text: "Wasuu ra ketemu cuk!",
+            no_results_text: "data tidak ditemukan!",
             width: "100%"
         });
 
@@ -2421,34 +2408,34 @@ function getTotal($periode, $data) {
                                 label: "Tracking Signal",
                                 data: <?= json_encode($tracking_tp) ?>,
                                 backgroundColor: 'transparent',
-                                borderColor: 'rgba(220,53,69,0.75)',
+                                borderColor: 'rgba(253, 215, 3,0.50)',
                                 borderWidth: 3,
                                 pointStyle: 'circle',
                                 pointRadius: 5,
                                 pointBorderColor: 'transparent',
-                                pointBackgroundColor: 'rgba(220,53,69,0.75)',
+                                pointBackgroundColor: 'rgba(253, 215, 3,0.75)',
                             },
                             {
-                                label: "Peramalan WMA",
+                                label: "Peramalan trend projection",
                                 data: <?= json_encode($f_tp) ?>,
                                 backgroundColor: 'transparent',
-                                borderColor: 'rgba(255, 99, 71, 0.5)',
+                                borderColor: 'rgba(50, 205, 50, 0.75)',
                                 borderWidth: 3,
                                 pointStyle: 'circle',
                                 pointRadius: 5,
                                 pointBorderColor: 'transparent',
-                                pointBackgroundColor: 'rgba(220,53,69,0.75)',
+                                pointBackgroundColor: 'rgba(50, 205, 50,0.50)',
                             },
                             {
                                 label: "Aktual",
                                 data: <?= json_encode($d_tp) ?>,
                                 backgroundColor: 'transparent',
-                                borderColor: 'rgba(76, 175, 80, 0.36)',
+                                borderColor: 'rgba(220,53,69, 0.75)',
                                 borderWidth: 3,
                                 pointStyle: 'circle',
                                 pointRadius: 5,
                                 pointBorderColor: 'transparent',
-                                pointBackgroundColor: 'rgba(220,53,69,0.75)',
+                                pointBackgroundColor: 'rgba(220,53,69,0.50)',
                             },
                         ]
                     },
@@ -2498,7 +2485,7 @@ function getTotal($periode, $data) {
                         },
                         title: {
                             display: true,
-                            text: 'Grafik data aktual dan peramalan'
+                            text: 'Grafik data aktual, peramalan dan tracking signal'
                         }
                     }
                 });

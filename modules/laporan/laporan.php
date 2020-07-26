@@ -21,7 +21,7 @@ switch ($act) {
                         <div class="row form-group">
                             <div class="col col-md-1"><label for="select" class=" form-control-label">Filter</label></div>
                                         <div class="col col-md-9">
-                                        <div class="form-check-inline form-check">
+                                            <div class="form-check-inline form-check">
                                                 <label for="inline-radio1" class="form-check-label ">
                                                     <input type="radio" id="harian" name="radio" value="harian" class="form-check-input" checked>Harian
                                                 </label>
@@ -32,6 +32,10 @@ switch ($act) {
                                                 &nbsp&nbsp
                                                 <label for="inline-radio3" class="form-check-label ">
                                                     <input type="radio" id="custom" name="radio" value="custom" class="form-check-input">Custom
+                                                </label>
+                                                 &nbsp&nbsp
+                                                <label for="inline-radio3" class="form-check-label ">
+                                                    <input type="radio" id="rekap" name="radio" value="rekap" class="form-check-input">Rekap
                                                 </label>
                                             </div>
                                         </div>     
@@ -60,12 +64,19 @@ switch ($act) {
                                 <input type="text" name="tanggal_akhir" value="<?php echo isset($_GET['tanggal_akhir'])?$_GET['tanggal_akhir']:date('d-m-Y')?>" class="form-control datepicker">
                             </div>
                         </div>
+
+                        <div class="row form-group" id="rekap_tgl" style="display: none">
+                            <div class="col col-md-1"><label for="select" class=" form-control-label">Rekap</label></div>
+                            <div class="col-md-3">
+                                <input type="text" name="tanggal_rekap" value="<?php echo date('d-m-Y')?>" class="form-control datepicker">
+                            </div>
+                        </div>
                          
-                          <div class="col-12 col-md-8 offset-md-5">
+                        <div class="col-12 col-md-8 offset-md-5">
                                 <button type="submit" value="proses" name="proses" class="btn btn-primary btn-sm">
                                     <i class="fa fa-dot-circle-o col-md"> PROSES </i> 
                                 </button>
-                            </div>
+                        </div>
                     </form>
                     <hr>
 
@@ -134,18 +145,28 @@ switch ($act) {
             $('#harian_tgl').fadeIn();
             $('#bulanan_tgl').fadeOut();
             $('#custom_tgl').fadeOut();
+            $('#rekap_tgl').fadeOut();
         }
         else if($("input[name='radio']:checked").val()=='bulanan')
         {
             $('#harian_tgl').fadeOut();
             $('#bulanan_tgl').fadeIn();
             $('#custom_tgl').fadeOut();
+            $('#rekap_tgl').fadeOut();
         }
         else if($("input[name='radio']:checked").val()=='custom')
         {
             $('#harian_tgl').fadeOut();
             $('#bulanan_tgl').fadeOut();
             $('#custom_tgl').fadeIn();
+            $('#rekap_tgl').fadeOut();
+        }
+        else if($("input[name='radio']:checked").val()=='rekap')
+        {
+            $('#harian_tgl').fadeOut();
+            $('#bulanan_tgl').fadeOut();
+            $('#custom_tgl').fadeOut();
+            $('#rekap_tgl').fadeIn();
         }
     }
 </script>     
@@ -160,13 +181,13 @@ switch ($act) {
             case 'harian':
             $tanggal=new DateTime($_POST['tanggal_harian']);
         ?>
-         <div class="animated fadeIn">
+        
+        <div class="animated fadeIn">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
                             <strong class="card-title">Laporan Harian</strong>
-                            
                         </div> 
                         
                         <div class="card-body">    
@@ -357,6 +378,76 @@ switch ($act) {
                 </div>
             </div><!-- .animated -->
         </div> 
+
+
+    <?php 
+    break;
+    case 'rekap':
+    $tanggal=new DateTime($_POST['tanggal_rekap']);
+    ?>
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">Rekap Hari Ini</strong>
+                    </div>
+
+                    <div class="card-body">
+                        Export File : <a href="export-excel.php?bulan=<?php echo $bulan[0] ?>&tahun=<?php echo $bulan[1] ?>&mode=<?php echo $mode?>" class="btn btn-success btn-sm" target="_blank">Excel Export</a>
+                          <a href="export-pdf.php?bulan=<?php echo $bulan[0] ?>&tahun=<?php echo $bulan[1] ?>&mode=<?php echo $mode?>" class="btn btn-danger btn-sm" target="_blank">PDF Export</a>
+                         <br><hr/>
+
+                        <table id="bootstrap-data-table" class="table table-bordered">
+                        
+                            <thead>
+                            <tr >
+                                <th>No</th>
+                                <th>nota</th>
+                                <th>Nama Obat</th>
+                                <th>Jumlah</th>                                      
+                                <th>Subtotal</th>
+                            </tr>
+                            </thead>
+                        
+                            <tbody>
+                            <?php
+                            $tampil = mysqli_query($koneksi, "SELECT detail_rekap.id_rek,detail_rekap.jumlah,detail_rekap.subtotal,table_obat.nama_obat,table_obat.bentuk_obat,table_rekap.tanggal,table_rekap.cara_bayar,table_rekap.nota FROM table_rekap JOIN detail_rekap ON detail_rekap.id_daterek=table_rekap.id_daterek JOIN table_obat ON detail_rekap.id_obat=table_obat.id_obat WHERE table_rekap.tanggal='".$tanggal->format('Y-m-d')."'");
+                            $no = 1;
+                            while ($r = mysqli_fetch_array($tampil)) {
+                            ?>
+                            <tr>
+                                <td><?= $no++ ?></td>
+                                <td><?= $r['nota'] ?></td>
+                                <td><?= $r['nama_obat'] ?><?= " " ?><?= $r['bentuk_obat'] ?></td>
+                                <td><?= $r['jumlah'] ?></td>                                          
+                                <td><?= $r['subtotal'] ?></td>                                         
+                            </tr>
+                            <?php
+                            }
+                            ?>
+                            </tbody>
+                        
+                            <tfoot>
+                            <tr>
+                                <td colspan="4"><b>Total</b></td>         
+                                <td></td>
+                            </tr>
+                            </tfoot> 
+                    </table>
+
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="text-right">
+                            <a class="btn btn-primary btn-md" href="?module=laporan" style="color:white">Kembali</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
             <?php break;
         }

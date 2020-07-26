@@ -13,7 +13,7 @@ switch ($act) {
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong class="card-title">Tabel Obat</strong>
+                            <strong class="card-title">Tabel Kategori Obat</strong>
 
                             <a type="button"  href="?module=kategori&act=add" class="btn btn-outline-info pull-right">Input Data<i class="fa ti-plus"></i></a>
                         </div>
@@ -76,7 +76,7 @@ switch ($act) {
                                         <label for="text-input" class=" form-control-label">Kode Kategori Obat</label></div>
                                     <div class="col-12 col-md-9">
                                         <input type="text" id="kode_kategori" name="kode_kategori" class="form-control">
-                                        <small class="form-text text-muted">Masukan kode ategori  obat</small></div>
+                                        <small class="form-text text-muted">Masukan kode kategori obat</small></div>
                                 </div>
                                 
                                 <div class="row form-group">
@@ -84,7 +84,7 @@ switch ($act) {
                                         <label for="text-input" class=" form-control-label">Nama Kategori  Obat</label></div>
                                     <div class="col-12 col-md-9">
                                         <input type="text" id="nama_kategori" name="nama_kategori" class="form-control">
-                                        <small class="form-text text-muted">Masukan kategori  nama obat</small></div>
+                                        <small class="form-text text-muted">Masukan nama kategori obat</small></div>
                                 </div>
 
                                 <div class="card-footer">
@@ -115,7 +115,7 @@ switch ($act) {
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>EDIT</strong> Ktegori Obat
+                            <strong>EDIT</strong> Data Kategori Obat
                         </div>
                         <div class="card-body card-block">
                             <form action="<?= $aksi ?>?module=kategori&act=update" method="POST"  class="form-horizontal">
@@ -134,7 +134,7 @@ switch ($act) {
                                     <div class="col col-md-3"><label for="text-input" class=" form-control-label">Nama Obat</label></div>
                                     <div class="col-12 col-md-9">
                                         <input type="text" id="text-input" name="nama_kategori" class="form-control" value="<?php echo $r[nama_kategori]; ?>">
-                                        <small class="form-text text-muted">Masukan nama obat</small></div>
+                                        <small class="form-text text-muted">Masukan nama kategori obat</small></div>
                                 </div>
                                                                
                                 <div class="card-footer">

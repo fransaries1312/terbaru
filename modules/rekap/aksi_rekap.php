@@ -57,7 +57,7 @@ elseif ($module=='rekap' AND $act=='input'){
     }
     else
     {
-        var_dump('ERROR QUERYMU CUK');
+        var_dump('ERROR QUERY');
         die;
     }
     

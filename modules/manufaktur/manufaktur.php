@@ -13,7 +13,7 @@ switch ($act) {
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong class="card-title">Tabel Obat</strong>
+                            <strong class="card-title">Tabel Manufaktur Obat</strong>
 
                             <a type="button"  href="?module=manufaktur&act=add" class="btn btn-outline-info pull-right">Input Data<i class="fa ti-plus"></i></a>
                         </div>
@@ -66,7 +66,7 @@ switch ($act) {
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>INPUT</strong> Data Kategori Obat
+                            <strong>INPUT</strong> Data Manufaktur Obat
                         </div>
                         <div class="card-body card-block">
                             <form action="<?= $aksi ?>?module=manufaktur&act=input" method="POST"  class="form-horizontal">
@@ -115,7 +115,7 @@ switch ($act) {
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>EDIT</strong> Ktegori Obat
+                            <strong>EDIT</strong> Data Manufaktur Obat
                         </div>
                         <div class="card-body card-block">
                             <form action="<?= $aksi ?>?module=manufaktur&act=update" method="POST"  class="form-horizontal">
@@ -124,10 +124,10 @@ switch ($act) {
                                 
                                 <div class="row form-group">
                                     <div class="col col-md-3">
-                                        <label for="text-input" class=" form-control-label">Kode Kategori Obat</label></div>
+                                        <label for="text-input" class=" form-control-label">Kode Manufaktur Obat</label></div>
                                     <div class="col-12 col-md-9">
                                         <input type="text" id="text-input" name="kode_manufaktur" class="form-control" value="<?php echo $r[kode_manufaktur]; ?>" >
-                                        <small class="form-text text-muted">Masukan kode kategori obat</small></div>
+                                        <small class="form-text text-muted">Masukan kode manufaktur obat</small></div>
                                 </div>
                                 
                                 <div class="row form-group">

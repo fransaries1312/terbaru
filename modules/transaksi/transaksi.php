@@ -363,11 +363,7 @@ switch($act)
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="3"><b>Total</b></td>
-                                        <td><b>Rp.&nbsp<?= number_format($total,0,',','.') ?></b></td>
-                                        <td><b>Rp.&nbsp<?= number_format($bayar,0,',','.') ?></b></td>
-                                        <td><b>Rp.&nbsp<?= number_format($kembali,0,',','.') ?></b></td>
-                                        <td></td>
+                                       
                                     </tr>
                                 </tfoot>
                             </table>

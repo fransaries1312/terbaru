@@ -9,7 +9,7 @@ switch ($act) {
     die;
     break;
     default:
-        ?>
+        //?>
 
 
         <div class="animated fadeIn">
