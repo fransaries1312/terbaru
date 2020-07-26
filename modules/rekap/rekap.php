@@ -5,8 +5,101 @@ $act = $_GET['act'];
 switch ($act) {
     // Tampil Rekap Data Penjualan
     case 'detail_transaksi':
-    print_r('aaaaaa');
-    die;
+    // print_r('aaaaaa');
+    // die;
+    $data=mysqli_query($koneksi, "SELECT * FROM table_rekap WHERE id_daterek='$_GET[id]' LIMIT 1");
+
+        if (!$data) {
+            printf("Error: %s\n", mysqli_error($koneksi));
+            exit();
+        }
+        $r=mysqli_fetch_array($data);
+    ?>
+        <div class="animated fadeIn">
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title">Penjualan Transaksi <?=$r['nota']?></strong>
+                            <!-- <a type="button"  href="?module=rekap&act=add" class="btn btn-outline-info pull-right">Input Data<i class="fa ti-file"></i></a> -->
+                        </div>
+                        <div class="card-body">
+                            <table border="0">
+                                <tbody>
+                                    <tr>
+                                        <td>No Nota</td>
+                                        <td>:</td>
+                                        <td><?=$r['nota']?></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tanggal Transaksi</td>
+                                        <td>:</td>
+                                        <td><?=date('d-m-Y',strtotime($r['tanggal']))?></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <hr/>
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Kode Obat</th>
+                                        <th>Nama Obat</th>
+                                        <th>Bentuk</th>
+                                        <th>QTY</th>
+                                        <th>Total</th>
+                                        <th>Diskon</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $total=0;
+                                    $detail_rekap=mysqli_query($koneksi, "SELECT * FROM detail_rekap JOIN table_obat ON table_obat.id_obat=detail_rekap.id_obat WHERE id_daterek='$r[id_daterek]'");
+                                    $no = 1;
+                                    while ($d = mysqli_fetch_array($detail_rekap)) {?>
+                                        <tr>
+                                            <td><?= $no?></td>
+                                            <td><?= $d['kode_obat']?></td>
+                                            <td><?= $d['nama_obat']?></td>
+                                            <td><?= $d['bentuk_obat']?></td>
+                                            <td><?= $d['jumlah']?></td>
+                                            <td>Rp.&nbsp<?= number_format($d['total'],0,',','.')?></td>
+                                            <td><?= $d['diskon']?></td>
+                                            <td>Rp.&nbsp<?= number_format($d['subtotal'],0,',','.')?></td>
+                                        </tr>
+                                    <?php
+                                $no++;$total+=$d['subtotal'];}
+                                    ?>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="7" style="text-align: right">Total Harga</td>
+                                        <td>Rp.&nbsp<?= number_format($total,0,',','.')?></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="7" style="text-align: right">Bayar</td>
+                                        <td>Rp.&nbsp<?= number_format($r['bayar'],0,',','.')?></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="7" style="text-align: right">Kembali</td>
+                                        <td>Rp.&nbsp<?= number_format($r['kembali'],0,',','.')?></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="7" style="text-align: right">Cara Bayar</td>
+                                        <td><?= $r['cara_bayar']?></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <div class="card-footer">
+                                <center><p><i>Terima kasih atas kepercayaan anda pada kami</i></p></center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- .animated -->
+        </div>
     break;
     default:
         ?>
