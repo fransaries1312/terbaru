@@ -29,13 +29,14 @@ switch ($act) {
                     <div class="card">
                         <div class="card-header">
                             <strong class="card-title">Tabel Obat</strong>
-
+                            <?php if ($_SESSION['level'] == 'user') {?>
                             <a type="button"  href="?module=obat&act=add" class="btn btn-outline-info pull-right">Input Data<i class="fa ti-plus"></i></a>
+                            <?php } ?>
                         </div>
                         <div class="card-body">
                             <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                 <thead>
-                                    <tr >
+                                    <tr>
                                         <th>No</th>
                                         <th>Kode Obat</th>
                                         <th>Nama Obat</th>
@@ -43,8 +44,10 @@ switch ($act) {
                                         <th>Kategori Obat</th>
                                         <th>Manufaktur Obat</th>
                                         <th>Harga Obat</th>
+                                        <?php if ($_SESSION['level'] == 'user') {?>
                                         <th>Aksi</th>
-                                        </tr>
+                                        <?php } ?>                                      
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     <?php
@@ -60,10 +63,12 @@ switch ($act) {
                                             <td><?= $r['nama_kategori'] ?></td>
                                             <td><?= $r['nama_manufaktur'] ?></td>
                                             <td><?= $r['harga_obat'] ?></td>
+                                            <?php if ($_SESSION['level'] == 'user') {?>
                                             <td>
                                                 <a href="?module=obat&act=edit&id=<?php echo $r[id_obat]; ?>" type="button" class="btn btn-outline-warning"><i class="fa fa-pencil"></i></a>
                                                 <a href="<?= $aksi ?>?module=obat&act=delete&id=<?php echo $r[id_obat]; ?>" type="button" class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
                                             </td>
+                                            <?php } ?>  
                                         </tr>
                                         <?php
                                     }

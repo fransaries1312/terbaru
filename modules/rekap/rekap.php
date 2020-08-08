@@ -100,9 +100,10 @@ switch ($act) {
                 </div>
             </div><!-- .animated -->
         </div>
+    <?php
     break;
     default:
-        //?>
+        ?>
 
 
         <div class="animated fadeIn">

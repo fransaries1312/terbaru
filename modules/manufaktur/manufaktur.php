@@ -14,8 +14,9 @@ switch ($act) {
                     <div class="card">
                         <div class="card-header">
                             <strong class="card-title">Tabel Manufaktur Obat</strong>
-
+                            <?php if ($_SESSION['level'] == 'user') {?>
                             <a type="button"  href="?module=manufaktur&act=add" class="btn btn-outline-info pull-right">Input Data<i class="fa ti-plus"></i></a>
+                        <?php } ?>
                         </div>
                         <div class="card-body">
                             <table id="bootstrap-data-table" class="table table-striped table-bordered">
@@ -24,7 +25,9 @@ switch ($act) {
                                         <th>No</th>
                                         <th>Kode Manufaktur</th>
                                         <th>Nama Manufaktur Obat</th>
+                                        <?php if ($_SESSION['level'] == 'user') {?>
                                         <th>Aksi</th>
+                                        <?php } ?>
                                         </tr>
                                 </thead>
                                 <tbody>
@@ -37,10 +40,12 @@ switch ($act) {
                                             <td><?= $no++ ?></td>
                                             <td><?= $r['kode_manufaktur'] ?></td>
                                             <td><?= $r['nama_manufaktur'] ?></td>
+                                            <?php if ($_SESSION['level'] == 'user') {?>
                                             <td>
                                                 <a href="?module=manufaktur&act=edit&id=<?php echo $r[id_manufaktur]; ?>" type="button" class="btn btn-outline-warning"><i class="fa fa-pencil"></i></a>
                                                 <a href="<?= $aksi ?>?module=manufaktur&act=delete&id=<?php echo $r[id_manufaktur]; ?>" type="button" class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
                                             </td>
+                                            <?php } ?>
                                         </tr>
                                         <?php
                                     }

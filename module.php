@@ -69,7 +69,9 @@ header('location:index.php');
                     </li>
                     
                     <li>
+                        
                         <a href="?module=transaksi"> <i class="menu-icon fa fa-barcode"></i> Transaksi </a>
+
                     </li>
 
                     <li class="menu-item-has-children dropdown">
@@ -83,11 +85,15 @@ header('location:index.php');
                     </li>
 
                     <li>
+                        
                         <a href="?module=peramalan"> <i class="menu-icon fa fa-magic"></i> Peramalan </a>
+                        
                     </li>
                     
                     <li>
+                        
                         <a href="?module=user"> <i class="menu-icon fa fa-group"></i> Akun </a>
+                        
                     </li>
 
                     
@@ -169,7 +175,7 @@ header('location:index.php');
     
     <!--  Chart js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.3/dist/Chart.bundle.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <!--Chartist Chart-->
     <script src="https://cdn.jsdelivr.net/npm/chartist@0.11.0/dist/chartist.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartist-plugin-legend@0.6.2/chartist-plugin-legend.min.js"></script>

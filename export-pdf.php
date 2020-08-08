@@ -26,10 +26,10 @@ $pdf->SetFont('Arial','B',13);
 if($mode=='harian')
 {
   $tanggal=$_GET['tanggal'];
-   $tampil = mysqli_query($koneksi, "SELECT detail_rekap.id_rek,detail_rekap.jumlah,detail_rekap.subtotal,table_obat.nama_obat,table_obat.bentuk_obat,table_rekap.tanggal,table_rekap.cara_bayar,table_rekap.nota FROM table_rekap JOIN detail_rekap ON detail_rekap.id_daterek=table_rekap.id_daterek JOIN table_obat ON detail_rekap.id_obat=table_obat.id_obat WHERE table_rekap.tanggal='".$tanggal."'");
+   $tampil = mysqli_query($koneksi, "SELECT table_obat.nama_obat,detail_rekap.jumlah,detail_rekap.subtotal FROM table_rekap JOIN detail_rekap ON detail_rekap.id_daterek=table_rekap.id_daterek JOIN table_obat ON detail_rekap.id_obat=table_obat.id_obat WHERE table_rekap.tanggal='".$tanggal."'");
     $no = 0;
 
-    $pdf->Cell(190,7,'LAPORAN PENJUALAN OBAT TANGGAL '.date('d-m-Y',strtotime($tanggal)),0,1,'C');
+  $pdf->Cell(190,7,'LAPORAN PENJUALAN OBAT TANGGAL '.date('d-m-Y',strtotime($tanggal)),0,1,'C');
 	$pdf->SetFont('Arial','B',12);
 	$pdf->Cell(10,7,'',0,1);
 }
@@ -70,8 +70,8 @@ $pdf->SetFont('Arial','',11);
 while ($row = mysqli_fetch_array($tampil)){
     $pdf->Cell(20,6,$no+1,1,0,'C');
     $pdf->Cell(50,6,$row['nama_obat'],1,0);
-    $pdf->Cell(50,6,$row['tanggal'],1,0,'C');
-    $pdf->Cell(50,6,$row['jumlah'],1,1,'C'); 
+    $pdf->Cell(50,6,$row['jumlah'],1,0,'C');
+    $pdf->Cell(50,6,$row['subtotal'],1,1,'C'); 
     $no++;
 }
 

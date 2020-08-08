@@ -293,44 +293,52 @@ $tgl_akhir=$tgl_akhir1->format('Y-m-d');
         $avmape_wma = $smape_wma / ($n_wma-3);
 //TP
         $n_tp = count($d_tp);
-
-
+//sum y
         $sd_tp = 0;
         foreach ($d_tp as $key => $value) {
+            //  $sd +=$d[$key];
             $sd_tp +=$value;
         }
 
+//x pow 2 
         foreach ($d_tp as $key => $value) {
-            $px_tp[$key] = pow($key, 2);
-        }
 
+            $px_tp[$key] = pow($key+1, 2);
+        }
+//sum x
         $sx_tp = 0;
         foreach ($d_tp as $key => $value) {
-            $sx_tp +=$key;
+
+            $sx_tp +=($key+1);
         }
 
+//sum x2
         $spx_tp = 0;
         foreach ($d_tp as $key => $value) {
+
             $spx_tp +=$px_tp[$key];
         }
-
+//xy
         foreach ($d_tp as $key => $value) {
-            $xy_tp[$key] = $key * $d_tp[$key];
-        }
 
+            $xy_tp[$key] = ($key+1) * $d_tp[$key];
+        }
+//sumxy
         $sxy_tp = 0;
         foreach ($d_tp as $key => $value) {
+
             $sxy_tp +=$xy_tp[$key];
         }
 
-//av periode
-        $an_tp = $sx_tp / $n_tp;
-//av data
+        $ax_tp = $sx_tp / $n_tp;
+
         $ay_tp = $sd_tp / $n_tp;
 
-        $b_tp = ($sxy_tp - ($n_tp * ($an_tp * $ay_tp))) / ($spx_tp - ($n_tp * pow($an_tp, 2)));
 
-        $a_tp = $ay_tp - ($b_tp * $an_tp);
+        $b_tp = ($sxy_tp - ($n_tp * $ax_tp * $ay_tp)) / ($spx_tp - $n_tp * pow($ax_tp, 2));
+
+        $a_tp = $ay_tp - ($b_tp * $ax_tp);
+
         $new_tp = array();
         foreach ($d_tp as $key => $value) {
 
@@ -436,7 +444,7 @@ toastr.warning('Parameter tanggal harus lebih dari 4 bulan','Info');
                                     <thead>
                                         <tr>
                                             <th>Periode</th>
-                                            <th >Single Exponential</th>
+                                            <th >Single Exponential (<?= $a_ses[$bestAlphaIndex] ?>)</th>
                                             <th >Weighted Moving Average</th>
                                             <th >Trend Projection</th>
                                         </tr>
@@ -484,7 +492,7 @@ toastr.warning('Parameter tanggal harus lebih dari 4 bulan','Info');
                                         </tr>
                                         <tr>
                                             <td>Best Alpha</td>
-                                            <td><?= $a_ses[$bestAlphaIndex] ?></td>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                         </tr>
@@ -1222,49 +1230,51 @@ function getTotal($periode, $data) {
         $d_tp=getTotal($tanggal,$d_tp);
 
         $n_tp = count($d_tp);
-
+//sum y
         $sd_tp = 0;
         foreach ($d_tp as $key => $value) {
             //  $sd +=$d[$key];
             $sd_tp +=$value;
         }
 
+//x pow 2 
         foreach ($d_tp as $key => $value) {
 
-            $px_tp[$key] = pow($key, 2);
+            $px_tp[$key] = pow($key+1, 2);
         }
-
+//sum x
         $sx_tp = 0;
         foreach ($d_tp as $key => $value) {
 
-            $sx_tp +=$key;
+            $sx_tp +=($key+1);
         }
 
+//sum x2
         $spx_tp = 0;
         foreach ($d_tp as $key => $value) {
 
             $spx_tp +=$px_tp[$key];
         }
-
+//xy
         foreach ($d_tp as $key => $value) {
 
-            $xy_tp[$key] = $key * $d_tp[$key];
+            $xy_tp[$key] = ($key+1) * $d_tp[$key];
         }
-
+//sumxy
         $sxy_tp = 0;
         foreach ($d_tp as $key => $value) {
 
             $sxy_tp +=$xy_tp[$key];
         }
 
-        $an_tp = $sx_tp / $n_tp;
+        $ax_tp = $sx_tp / $n_tp;
 
         $ay_tp = $sd_tp / $n_tp;
 
 
-        $b_tp = ($sxy_tp - ($n_tp * ($an_tp * $ay_tp))) / ($spx_tp - ($n_tp * pow($an_tp, 2)));
+        $b_tp = ($sxy_tp - ($n_tp * $ax_tp * $ay_tp)) / ($spx_tp - $n_tp * pow($ax_tp, 2));
 
-        $a_tp = $ay_tp - ($b_tp * $an_tp);
+        $a_tp = $ay_tp - ($b_tp * $ax_tp);
 
 
         foreach ($d_tp as $key => $value) {
@@ -1332,6 +1342,21 @@ function getTotal($periode, $data) {
                 $tracking_tp[$key] = $rsfe_tp[$key] / $mad1_tp[$key];
             }
         
+        foreach ($tracking_tp as $key => $value) {
+
+                $min_tp[$key] = $value < 0;
+                $plus_tp[$key] = $value > 0;
+            }
+
+        $smin_tp = 0;
+        $splus_tp = 0;
+        foreach ($tracking_tp as $key => $value) {
+
+            $smin_tp +=$min_tp[$key];
+            $splus_tp +=$plus_tp[$key];
+        }
+
+        //$min_tr_tp = count($tracking_tp < 0);
 
         echo "</pre>";
         ?>
@@ -1346,6 +1371,8 @@ function getTotal($periode, $data) {
                             <tr>
                                 <th scope="col">Periode Data</th>
                                 <th scope="col">Data Aktual</th>
+                                <th scope="col">x2</th>
+                                <th scope="col">xy</th>
                                 <th scope="col">Data Peramalan</th>
                                 <th scope="col">Nilai Error</th>
                                 <th scope="col">Absolute Error</th>
@@ -1363,6 +1390,8 @@ function getTotal($periode, $data) {
                                 <tr>
                                     <td><?= $key +1?></td>
                                     <td><?= $d_tp[$key] ?></td>
+                                    <td><?= $px_tp[$key] ?></td>
+                                    <td><?= $xy_tp[$key] ?></td>
                                     <td><?= round($f_tp[$key], 2) ?></td>
                                     <td><?= round($e_tp[$key], 2) ?></td>
                                     <td><?= round($m_tp[$key], 2) ?></td>
@@ -1378,8 +1407,10 @@ function getTotal($periode, $data) {
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td></td>
+                                <th></th>
                                 <th colspan="3"> Jumlah</th>
+                                <td></td>
+                                <td></td>
                                 <td><?= round($sm_tp, 2) ?></td>
                                 <td><?= round($sp_tp, 2) ?></td>
                                 <td></td>
@@ -1388,8 +1419,10 @@ function getTotal($periode, $data) {
                                 <td></td>
                             </tr>
                             <tr>
+                                <th></th>
+                                <th colspan="3"> Rata rata</th>
                                 <td></td>
-                                <th colspan="3"> rata rata</th>
+                                <td></td>
                                 <td><?= round($rm_tp, 2) ?></td>
                                 <td><?= round($asp_tp, 2) ?></td>
                                 <td></td>
@@ -1590,6 +1623,26 @@ case "tracking_ses":
             
                 $tracking_ses[$key] = $rsfe_ses[$key] / $mad1[$key];
             }
+
+        foreach ($tracking_ses as $key => $value) {
+
+                $min_ses[$key] = $value < 0;
+                $plus_ses[$key] = $value > 0;
+                $maxmin_ses[$key] = $value < (-4);
+                $maxplus_ses[$key] = $value > 4;
+            }
+
+        $smin_ses = 0;
+        $splus_ses = 0;
+        $smaxmin_ses = 0;
+        $smaxplus_ses = 0;
+        foreach ($tracking_ses as $key => $value) {
+
+            $smin_ses +=$min_ses[$key];
+            $splus_ses +=$plus_ses[$key];
+            $smaxmin_ses +=$maxmin_ses[$key];
+            $smaxplus_ses +=$maxplus_ses[$key];
+        }
         
 
 //table
@@ -1637,10 +1690,10 @@ case "tracking_ses":
                             <tr>
                                 <td></td>
                                 <th colspan="2"> tracking signal positif </th>
-                                <td></td>
+                                <td><?= $splus_ses ?>(<?= $smaxplus_ses ?>)</td>
                                 <td></td>
                                 <th colspan="2"> tracking signal negatif</th>
-                                <td></td>
+                                <td><?= $smin_ses ?>(<?= $smaxmin_ses ?>)</td>
                                 <td></td>
                             </tr>
                         </tfoot>
@@ -1930,7 +1983,26 @@ function getTotal($periode, $data) {
 
                 $tracking_wma[$key] = $rsfe_wma[$key] / $mad1_wma[$key];
             }
-        
+
+        foreach ($tracking_wma as $key => $value) {
+
+                $min_wma[$key+2] = $value < 0;
+                $plus_wma[$key+2] = $value > 0;
+                $maxmin_wma[$key+2] = $value < (-4);
+                $maxplus_wma[$key+2] = $value > 4;
+            }
+
+        $smin_wma = 0;
+        $splus_wma = 0;
+        $smaxmin_wma = 0;
+        $smaxplus_wma = 0;
+        foreach ($tracking_wma as $key => $value) {
+
+            $smin_wma +=$min_wma[$key+2];
+            $splus_wma +=$plus_wma[$key+2];
+            $smaxmin_wma +=$maxmin_wma[$key+2];
+            $smaxplus_wma +=$maxplus_wma[$key+2];
+        }
 
 
         ?>
@@ -1982,10 +2054,10 @@ function getTotal($periode, $data) {
                             <tr>
                                <td></td>
                                 <th colspan="2"> tracking signal positif </th>
-                                <td></td>
+                                <td><?= $splus_wma ?>(<?= $smaxplus_wma ?>)</td>
                                 <td></td>
                                 <th colspan="2"> tracking signal negatif</th>
-                                <td></td>
+                                <td><?= $smin_wma ?>(<?= $smaxmin_wma ?>)</td>
                                 <td></td>
                             </tr>
                         </tfoot>
@@ -2198,59 +2270,64 @@ function getTotal($periode, $data) {
             $t_tp++;
         }
 
-
         $d_tp=getTotal($tanggal,$d_tp);
 
         $n_tp = count($d_tp);
-
+//sum y
         $sd_tp = 0;
         foreach ($d_tp as $key => $value) {
             //  $sd +=$d[$key];
             $sd_tp +=$value;
         }
 
+//x pow 2 
         foreach ($d_tp as $key => $value) {
 
-            $px_tp[$key] = pow($key, 2);
+            $px_tp[$key] = pow($key+1, 2);
         }
-
+//sum x
         $sx_tp = 0;
         foreach ($d_tp as $key => $value) {
 
-            $sx_tp +=$key;
+            $sx_tp +=($key+1);
         }
 
+//sum x2
         $spx_tp = 0;
         foreach ($d_tp as $key => $value) {
 
             $spx_tp +=$px_tp[$key];
         }
-
+//xy
         foreach ($d_tp as $key => $value) {
 
-            $xy_tp[$key] = $key * $d_tp[$key];
+            $xy_tp[$key] = ($key+1) * $d_tp[$key];
         }
-
+//sumxy
         $sxy_tp = 0;
         foreach ($d_tp as $key => $value) {
 
             $sxy_tp +=$xy_tp[$key];
         }
 
-        $an_tp = $sx_tp / $n_tp;
+        $ax_tp = $sx_tp / $n_tp;
 
         $ay_tp = $sd_tp / $n_tp;
 
 
-        $b_tp = ($sxy_tp - ($n_tp * ($an_tp * $ay_tp))) / ($spx_tp - ($n_tp * pow($an_tp, 2)));
+        $b_tp = ($sxy_tp - ($n_tp * $ax_tp * $ay_tp)) / ($spx_tp - $n_tp * pow($ax_tp, 2));
 
-        $a_tp = $ay_tp - ($b_tp * $an_tp);
+        $a_tp = $ay_tp - ($b_tp * $ax_tp);
 
 
         foreach ($d_tp as $key => $value) {
 
             $f_tp[$key] = $a_tp + ($b_tp * $key);
         }
+        $f_tp[$key + 1] = $a_tp + ($b_tp * ($key + 1));
+        $f_tp[$key + 2] = $a_tp + ($b_tp * ($key + 2));
+        $f_tp[$key + 3] = $a_tp + ($b_tp * ($key + 3));
+        $f_tp[$key + 4] = $a_tp + ($b_tp * ($key + 4));
 
         foreach ($d_tp as $key => $value) {
 
@@ -2267,12 +2344,12 @@ function getTotal($periode, $data) {
         $rm_tp = $sm_tp / $n_tp;
 
 //mape
-        // $sp_tp = 0;
-        // foreach ($d_tp as $key => $value) {
-        //     $p_tp[$key] = ($m_tp[$key] / $d_tp[$key]) * 100;
-        //     $sp_tp +=$p_tp[$key];
-        // }
-        // $asp_tp = $sp_tp / $n_tp;
+        $sp_tp = 0;
+        foreach ($d_tp as $key => $value) {
+            $p_tp[$key] = ($m_tp[$key] / $d_tp[$key]) * 100;
+            $sp_tp +=$p_tp[$key];
+        }
+        $asp_tp = $sp_tp / $n_tp;
 
 //rsfe
         foreach ($d_tp as $key => $value) {
@@ -2304,10 +2381,24 @@ function getTotal($periode, $data) {
 
         //tracking
         foreach ($d_tp as $key => $value) {
-            
+
                 $tracking_tp[$key] = $rsfe_tp[$key] / $mad1_tp[$key];
-            
+            }
+        
+        foreach ($tracking_tp as $key => $value) {
+
+                $min_tp[$key] = $value < 0;
+                $plus_tp[$key] = $value > 0;
+            }
+
+        $smin_tp = 0;
+        $splus_tp = 0;
+        foreach ($d_tp as $key => $value) {
+
+            $smin_tp +=$min_tp[$key];
+            $splus_tp +=$plus_tp[$key];
         }
+
 
         echo "</pre>";
         ?>
@@ -2333,7 +2424,7 @@ function getTotal($periode, $data) {
                         </thead>
                         <tbody>
                             <?php
-                            foreach ($f_tp as $key => $value) {
+                            foreach ($d_tp as $key => $value) {
                                 ?>
                                 <tr>
                                     <td><?= $key +1?></td>
@@ -2354,10 +2445,10 @@ function getTotal($periode, $data) {
                             <tr>
                                 <td></td>
                                 <th colspan="2"> tracking signal positif </th>
-                                <td></td>
+                                <td><?= $splus_tp ?></td>
                                 <td></td>
                                 <th colspan="2"> tracking signal negatif</th>
-                                <td></td>
+                                <td><?= $smin_tp ?></td>
                                 <td></td>
                             </tr>
                         </tfoot>

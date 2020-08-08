@@ -80,7 +80,6 @@ switch ($act) {
                                         <th>No</th>
                                         <th>Kode Obat</th>
                                         <th>Nama Obat</th>
-                                        <th>Bentuk</th>
                                         <th>QTY</th>
                                         <th>Total</th>
                                         <th>Diskon</th>
@@ -96,8 +95,7 @@ switch ($act) {
                                         <tr>
                                             <td><?= $no?></td>
                                             <td><?= $d['kode_obat']?></td>
-                                            <td><?= $d['nama_obat']?></td>
-                                            <td><?= $d['bentuk_obat']?></td>
+                                            <td><?= $d['nama_obat']?> <?= $d['bentuk_obat']?></td>
                                             <td><?= $d['jumlah']?></td>
                                             <td>Rp.&nbsp<?= number_format($d['total'],0,',','.')?></td>
                                             <td><?= $d['diskon']?></td>
