@@ -37,7 +37,7 @@ error_reporting(E_ALL);
 
 function autocode($koneksi)
 {
-    $query=mysqli_query($koneksi, "SELECT SUBSTR(nota,11,4) as nota,tanggal FROM table_rekap ORDER BY ABS(nota) DESC");
+    $query=mysqli_query($koneksi, "SELECT SUBSTR(nota,11,4) as nota,tanggal FROM table_rekap ORDER BY created_at DESC");
     if (!$query) {
         printf("Error: %s\n", mysqli_error($koneksi));
         exit();

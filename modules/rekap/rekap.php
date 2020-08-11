@@ -1,4 +1,4 @@
-
+<script type="text/javascript" src="http://code.jquery.com/jquery-3.0.0.min.js"></script>
 <?php
 $aksi = "modules/rekap/aksi_rekap.php";
 $act = $_GET['act'];
@@ -51,6 +51,7 @@ switch ($act) {
                                         <th>Total</th>
                                         <th>Diskon</th>
                                         <th>Subtotal</th>
+                                        <th>Cancel</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -68,6 +69,7 @@ switch ($act) {
                                             <td>Rp.&nbsp<?= number_format($d['total'],0,',','.')?></td>
                                             <td><?= $d['diskon']?></td>
                                             <td>Rp.&nbsp<?= number_format($d['subtotal'],0,',','.')?></td>
+                                            <td><a href="modules/rekap/aksi_rekap.php?module=rekap&act=hapus_detail_rekap&id=<?php echo $d['id_rek']; ?>&id_daterek=<?php echo $d['id_daterek']; ?>" type="button" class="btn btn-outline-danger hapus"><i class="fa fa-trash"></i></a></td>
                                         </tr>
                                     <?php
                                 $no++;$total+=$d['subtotal'];}
@@ -100,6 +102,21 @@ switch ($act) {
                 </div>
             </div><!-- .animated -->
         </div>
+         <script type="text/javascript">
+            $(document).ready(function(){
+                $('.hapus').click(function(){
+                    var con=confirm("Apakah anda yakin akan menghapus transaksi ini?");
+                    if(con==true)
+                    {
+                        return true;
+                    } 
+                    else
+                    {
+                        return false;
+                    }
+                })
+            })
+        </script>
     <?php
     break;
     default:
